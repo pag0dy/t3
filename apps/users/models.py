@@ -17,6 +17,8 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     jobtitle = models.CharField(max_length=100)
+    email = models.EmailField()
+    password = models.CharField(max_length=80)
     permission_level = models.CharField(max_length=1, choices=LEVELS)
     company = models.ForeignKey(Company, related_name='staff_members', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
