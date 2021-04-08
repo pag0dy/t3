@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sesión de trabajo{% endblock %}
+{% block nav %}
+    {% include 'nav-bar.html' %}
+{% endblock %}
+{% block header %}
+<header class="text-center m-5">
+    <h3 class="font-main big-font">Sesión de trabajo de {{ user.name }}</h3>
+</header>
+{% endblock %}
+{% block content %}
+    <div>
+        <h3 class="font-main">Comienza a trabajar en una de tus tareas</h3>
+        <form action="startWorksesh" method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col">
+                    <label for="proyect_select">Proyecto:</label>
+                    <select class="form-control" name="project_select" id="project_select">
+                        <option value="project_id">Asesoría MINVU</option>
+                        <option value="project_id">Asesoría Inmobiliaria X</option>
+                        <option value="project_id">Asesoría Constructora X</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="task_select">Tarea:</label>
+                    <select class="form-control" name="task_select" id="task_select">
+                        <option value="task_id">Revisar informe</option>
+                        <option value="task_id">Levantar procesos</option>
+                        <option value="task_id">Capacitación</option>
+                    </select>
+                </div>
+                <div class="col mt-4">
+                    <button type="submit" class="btn btn-success"><i class="bi bi-caret-right"></i></button>
+                    <button type="submit" class="btn btn-warning"><i class="bi bi-pause-fill"></i></button>
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-stop"></i></button>
+                </div>
+            </div>
+        </form>
+        <p class="lead">¿Quieres agregar a tu equipo y sus tareas? Cámbiate a una cuenta Profesional <a href="#">aquí!</a></p>
+    </div>
+    <div class="row mt-5">
+        <h3 class="font-main">Sesiones de trabajo recientes</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <th>Tarea</th>
+                <th>Proyecto</th>
+                <th>Duración</th>
+                <th>Detalles</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Revisar informe MINVU</td>
+                    <td>Asesoría MINVU</td>
+                    <td>03:44</td>
+                    <td class="text-center"><a href="#">+</a></td>
+                </tr>
+                <tr>
+                    <td>Capacitación Inmobiliaria X</td>
+                    <td>Asesoría Inmobiliaria X</td>
+                    <td>2:05</td>
+                    <td class="text-center"><a href="#">+</a></td>
+                </tr>
+                <tr>
+                    <td>Levantar procesos Constructora X</td>
+                    <td>Constructora X</td>
+                    <td>01:25</td>
+                    <td class="text-center"><a href="#">+</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

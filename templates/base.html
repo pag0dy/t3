@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}{% endblock %}| T3
+    </title>
+    
+    {% block favicon %}
+        <link rel="shortcut icon" href="{% static 'master/img/favicon.ico' %}"/>
+    {% endblock %}
+    
+    {# Block where global CSS will go. #}
+    {% block styles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'master/css/style.css' %}"/>   
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Advent+Pro&family=Open+Sans&display=swap" rel="stylesheet">
+    {% endblock %}
+
+    {# Additional CSS - specific to certain pages #}
+    {% block extrastyles %}
+    {% endblock %}
+
+    {# Scripts loaded from a CDN. #}
+    {% block cdn_scripts %}
+    {% endblock %}
+
+    {# Local scripts #}
+    {% block scripts %}
+        <script src="{% static 'master/js/functions.js' %}"></script>
+    {% endblock %}
+
+    {# Load extra scripts #}
+    {% block extrascripts %}
+    {% endblock %}
+</head>
+<body class="bg-dark-grad text-light">
+    {% block nav %}
+    {% endblock %}
+    {% block header %}
+    {% endblock %} 
+    {# El contenido master va en este bloque #}
+    <main class="container">
+    {% block content %}
+    
+    {% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,63 @@
+* {
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+.font-main {
+    font-family: 'Advent Pro', sans-serif;
+}
+
+.font-secondary {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.bg-dark-grad {
+    background: #141E30;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.bg-light-grad {
+    background: #FFB75E;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ED8F03, #FFB75E);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ED8F03, #FFB75E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.orange_color {
+    color:#ED8F03;
+}
+
+.blue_color {
+    color: #243B55;
+}
+
+.grey-white {
+    color:#ECE9E6;
+}
+
+.dark-grey {
+    color:#414345;
+}
+
+.jumbo-font {
+    font-size: 200px;
+    text-shadow: 5px 5px #ED8F03;
+}
+
+.big-font {
+    font-size: 32px;
+}
+
+.main-img {
+    width:80%;
+    height:auto;
+    background-color: rgba(255, 250, 250, 0.2);
+    padding:10px;
+    border-radius: 20px;
+    box-shadow: 5px 5px #ED8F03;
+}
+
+.bg-orange {
+    background-color: #ED8F03;
+}
