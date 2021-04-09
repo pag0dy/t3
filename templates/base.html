@@ -38,8 +38,10 @@
     {# Load extra scripts #}
     {% block extrascripts %}
     {% endblock %}
+
 </head>
 <body class="bg-dark-grad text-light">
+    {% load crispy_forms_tags %}
     {% block nav %}
     {% endblock %}
     {% block header %}

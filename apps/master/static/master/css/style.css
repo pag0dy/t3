@@ -49,6 +49,23 @@
     font-size: 32px;
 }
 
+.header-font {
+    color: whitesmoke;
+    font-size: 86px;
+    text-shadow: 5px 5px #ED8F03;
+}
+
+.header-font:hover {
+    color: #ED8F03;
+    font-size: 86px;
+    text-shadow: 5px 5px whitesmoke;
+    text-decoration: none;
+}
+
+.subheader-font {
+    font-size: 64px;
+}
+
 .main-img {
     width:80%;
     height:auto;
