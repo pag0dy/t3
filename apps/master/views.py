@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from ..users.forms import RegistrationForm, LoginForm, CompanyForm
+from ..users.forms import RegistrationForm, LoginForm, CompanyForm, AddStaffForm
 from ..users.models import User, Company
 from .utils import filtro_usuario, filtro_usuario_email
 import bcrypt
@@ -15,7 +15,6 @@ def home(request):
     if 'id' in request.session:
         this_user = filtro_usuario(request.session['id'])
     return render(request, 'home.html', {'user':this_user})
-
 
 def login(request):
     if request.method == 'POST':
@@ -54,6 +53,7 @@ def register(request):
                     comp_form = CompanyForm(request.POST)
                     if comp_form.is_valid():
                         nueva_empresa = comp_form.save()
+                        request_sesion['company'] = nueva_empresa.id
                         nuevo_usuario.company = nueva_empresa
                         nuevo_usuario.permission_level = 'a'
                         nuevo_usuario.save()
@@ -83,7 +83,12 @@ def logout(request):
         return HttpResponse('no has iniciado una sesión')
 
 def team_setup(request):
-    return HttpResponse('Crear equipo')
+    if request.method == 'GET':
+        form = AddStaffForm()
+        return render(request, 'team_setup.html', {'form':form})
+
+    else:
+        return HttpResponse('Guardar usuario')
 
 
 def worksesh(request):

@@ -61,6 +61,19 @@ class LoginForm(forms.ModelForm):
             'password': 'Contraseña'
         }
 
+
+class AddStaffForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['name', 'lastname', 'email', 'jobtitle', 'permission_level']
+
+        labels = {
+            'name': 'Nombre',
+            'lastname': 'Apellido',
+            'jobtitle': 'Cargo',
+            'permission_level': 'Tipo de usuario',
+        }
+
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company

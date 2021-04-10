@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Equipo de Trabajo{% endblock %}
+{% block nav %}
+    {% load crispy_forms_tags %}
+    {% include 'nav-bar.html' %}
+{% endblock %}
+{% block header %}
+<header class="text-center m-5">
+    <h3 class="font-main big-font">Colaboradores de  {{ user.name }}</h3>
+</header>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3 class="font-main">Agrega a tus colaboradores</h3>
+        <form action="{% url 'team_setup' %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-warning" type="submit">Agregar</button>
+        </form>
+    </div>
+    <div class="col">
+        <h3 class="font-main">Colaboradores</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <th>Nombre</th>
+                <th>Cargo</th>
+                <th>Correo</th>
+                <th>Permisos</th>
+                <th>Detalles</th>
+            </thead>
+            <tbody class="text-light">
+                <tr>
+                    <td>Pepito Palotes</td>
+                    <td>Asistente</td>
+                    <td>pepito@palotes.cl</td>
+                    <td>Usuario</td>
+                    <td class="text-center"><a href="#">+</a></td>
+                </tr>
+                <tr>
+                    <td>Fulano DeTal</td>
+                    <td>Coordinador</td>
+                    <td>fulano@detal.cl</td>
+                    <td>Usuario</td>
+                    <td class="text-center"><a href="#">+</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
