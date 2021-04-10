@@ -15,3 +15,13 @@ def filtro_usuario_email(email):
     if activo:
         usuario_activo = activo[0]
         return usuario_activo
+
+def filtro_empresa(id):
+    company = Company.objects.filter(id=id)
+    if company:
+        this_company = company[0]
+        return this_company
+
+
+def remove_blanks(string):
+    return string.replace(' ', '')

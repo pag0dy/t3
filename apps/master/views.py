@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse
 from ..users.forms import RegistrationForm, LoginForm, CompanyForm, AddStaffForm
 from ..users.models import User, Company
-from .utils import filtro_usuario, filtro_usuario_email
+from django.contrib import messages
+from .utils import filtro_usuario, filtro_usuario_email, filtro_empresa, remove_blanks
 import bcrypt
 
 def crearSesion(request, usuario):
@@ -53,7 +54,7 @@ def register(request):
                     comp_form = CompanyForm(request.POST)
                     if comp_form.is_valid():
                         nueva_empresa = comp_form.save()
-                        request_sesion['company'] = nueva_empresa.id
+                        request.session['company'] = nueva_empresa.id
                         nuevo_usuario.company = nueva_empresa
                         nuevo_usuario.permission_level = 'a'
                         nuevo_usuario.save()
@@ -88,8 +89,34 @@ def team_setup(request):
         return render(request, 'team_setup.html', {'form':form})
 
     else:
-        return HttpResponse('Guardar usuario')
+        form = AddStaffForm(request.POST)
+        if form.is_valid():
+            nuevo_staff = form.save(commit=False)
+            empresa = filtro_empresa(request.session['company'])
+            nombre_empresa = remove_blanks(empresa.company_name)
+            print(nombre_empresa)
+            if len(nombre_empresa) < 4:
+                password = nuevo_staff.name + nombre_empresa
+            else:
+                nombre_empresa = nombre_empresa[0:4]
+                print(nombre_empresa)
+                staffName = nuevo_staff.name
+                password = staffName + nombre_empresa
+                pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
+                nuevo_staff.password = pw_hash
+                nuevo_staff.account_type = 'TA'
+                nuevo_staff.company = empresa
+                nuevo_staff.save()
+                mensaje = "Colaborador agregado exitosamente!"
+                messages.success(request, mensaje )
+                return redirect('team_setup')
 
+
+        else:
+            context = {
+                'form': AddStaffForm()
+            }
+            return render(request, 'team_setup.html', {'form':form})
 
 def worksesh(request):
     if 'id' in request.session:

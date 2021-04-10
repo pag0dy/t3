@@ -67,6 +67,13 @@ class AddStaffForm(forms.ModelForm):
         model = User
         fields = ['name', 'lastname', 'email', 'jobtitle', 'permission_level']
 
+        email = forms.EmailField(
+            widget=forms.EmailInput(attrs={
+                'class': 'form-control',
+            }),
+            error_messages={'invalid': 'Por favor ingrese un email válido'}
+        )
+
         labels = {
             'name': 'Nombre',
             'lastname': 'Apellido',
