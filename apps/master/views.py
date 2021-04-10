@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from ..users.forms import RegistrationForm, LoginForm
+from ..users.forms import RegistrationForm, LoginForm, CompanyForm
 from ..users.models import User, Company
 from .utils import filtro_usuario, filtro_usuario_email
 import bcrypt
@@ -36,30 +36,39 @@ def login(request):
 
 def register(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            nuevo_usuario = form.save(commit=False)
-            password = form.clean_password()
+        reg_form = RegistrationForm(request.POST)
+        if reg_form.is_valid():
+            nuevo_usuario = reg_form.save(commit=False)
+            password = reg_form.clean_password()
             
             if password:
                 pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
                 nuevo_usuario.password = pw_hash
                 if nuevo_usuario.account_type == 'SU':
                     nuevo_usuario.company = NoCompany
+                    nuevo_usuario.permission_level = 'a'
                     nuevo_usuario.save()
                     crearSesion(request, nuevo_usuario)
                     return redirect('home')
                 else:
-                    crearSesion(request, nuevo_usuario)
-                    return redirect('team_setup')
+                    comp_form = CompanyForm(request.POST)
+                    if comp_form.is_valid():
+                        nueva_empresa = comp_form.save()
+                        nuevo_usuario.company = nueva_empresa
+                        nuevo_usuario.permission_level = 'a'
+                        nuevo_usuario.save()
+                        crearSesion(request, nuevo_usuario)
+                        return redirect('team_setup')
 
         else:                    
             return redirec('register')
 
     else:
-        form = RegistrationForm()
+        reg_form = RegistrationForm()
+        company_form = CompanyForm()
         context = {
-            'reg_form' : form,
+            'reg_form' : reg_form,
+            'company_form': company_form
         }
         return render(request, 'register.html', context)
 
@@ -72,6 +81,9 @@ def logout(request):
         return redirect('index')
     except:
         return HttpResponse('no has iniciado una sesión')
+
+def team_setup(request):
+    return HttpResponse('Crear equipo')
 
 
 def worksesh(request):

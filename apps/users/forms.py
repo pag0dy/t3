@@ -60,3 +60,13 @@ class LoginForm(forms.ModelForm):
         labels = {
             'password': 'Contraseña'
         }
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = '__all__'
+
+        labels = {
+            'company_name': 'Nombre de la empresa',
+            'n_workers': 'Número de trabajadores'
+        }
