@@ -62,7 +62,7 @@ def register(request):
                         return redirect('team_setup')
 
         else:                    
-            return redirec('register')
+            return redirect('register')
 
     else:
         reg_form = RegistrationForm()

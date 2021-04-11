@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Crear Proyecto{% endblock %}
+{% block nav %}
+    {% load crispy_forms_tags %}
+    {% include 'nav-bar.html' %}
+{% endblock %}
+{% block header %}
+<header class="text-center m-5">
+    <h3 class="font-main big-font">Proyectos de {{ user.name }}</h3>
+</header>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <div>            
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+                    {% endfor %}
+                </ul>
+            {% endif %}                   
+        </div>
+        <h3 class="font-main">Agrega un nuevo proyecto</h3>
+        <form action="{% url 'createProject' %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-warning" type="submit">Agregar</button>
+        </form>
+    </div>
+    <div class="col">
+        <h3 class="font-main">Proyectos</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <th>Nombre</th>
+                <th>Cliente</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Término</th>
+                <th>Detalles</th>
+            </thead>
+            <tbody class="text-light">               
+                {% if user.permission_level == 'a' %}
+                    {% for project in company.company_projects.all %}
+                    <tr>
+                        <td>{{ project.project_name }}</td>
+                        <td>{{ project.client }}</td>
+                        <td>{{ project.startDate }}</td>
+                        <td>{{ project.endDate }}</td>
+                        <td><a href="{% url 'project' id=project.id %}">+</a></td>
+                    </tr>                       
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

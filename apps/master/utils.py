@@ -1,4 +1,5 @@
 from ..users.models import User, Company
+from ..tasks.models import Project, Task, Assignments
 
 def filtro_usuario(id_usuario):
     activo = User.objects.filter(id = id_usuario)
@@ -21,6 +22,12 @@ def filtro_empresa(id):
     if company:
         this_company = company[0]
         return this_company
+
+def filtro_proyecto(id):
+    project = Project.objects.filter(id=id)
+    if project:
+        this_project = project[0]
+        return this_project
 
 
 def remove_blanks(string):
