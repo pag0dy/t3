@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from ..users.forms import RegistrationForm, LoginForm, CompanyForm, AddStaffForm
 from ..users.models import User, Company
+from ..tasks.models import Assignments, Project, Task
 from django.contrib import messages
 from .utils import filtro_usuario, filtro_usuario_email, filtro_empresa, remove_blanks
 import bcrypt
@@ -29,6 +30,9 @@ def login(request):
         else:
             este_usuario = filtro_usuario_email(request.POST['email'])
             crearSesion(request, este_usuario)
+            if este_usuario.company != 'No company':
+                esta_empresa = este_usuario.company               
+                request.session['company'] = esta_empresa.id
             return redirect('home')
 
     else:
@@ -86,7 +90,12 @@ def logout(request):
 def team_setup(request):
     if request.method == 'GET':
         form = AddStaffForm()
-        return render(request, 'team_setup.html', {'form':form})
+        company = filtro_empresa(request.session['company'])
+        context = {
+            'form':form, 
+            'company':company
+        }
+        return render(request, 'team_setup.html', context)
 
     else:
         form = AddStaffForm(request.POST)
@@ -117,6 +126,19 @@ def team_setup(request):
                 'form': AddStaffForm()
             }
             return render(request, 'team_setup.html', {'form':form})
+
+def manage_team(request):
+    if request.method == 'GET':
+        company = filtro_empresa(request.session['company'])
+        user = filtro_usuario(request.session['id'])
+        assignments = Assignments.objects.all()
+        context = {
+            'company':company,
+            'user':user,
+            'assignments':assignments
+        }
+        return render(request, 'manage_team.html', context)
+
 
 def worksesh(request):
     if 'id' in request.session:

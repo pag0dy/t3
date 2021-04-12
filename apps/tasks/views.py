@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import Project, Task, Assignments
 from ..users.models import User, Company
 from django.contrib import messages
-from ..master.utils import filtro_empresa, filtro_usuario, filtro_proyecto
+from ..master.utils import filtro_empresa, filtro_usuario, filtro_proyecto, filtro_tarea
 from .forms import ProjectForm, TaskForm
 
 def createProject(request):
@@ -39,13 +39,18 @@ def createProject(request):
             return render(request, 'createProject.html', context)
 
 def project(request, id):
+    user = filtro_usuario(request.session['id'])
+    empresa = filtro_empresa(request.session['company'])
     project = filtro_proyecto(id)
     if request.method == 'GET':
         form = TaskForm()
         if project:
             context = {
                 'project': project,
-                'form': form
+                'form': form,
+                'user':user,
+                'company': empresa
+
             }
             return render(request, 'project.html', context)
 
@@ -57,6 +62,16 @@ def project(request, id):
             nueva_tarea.save()
             mensaje = "Tarea agregada exitosamente!"
             messages.success(request, mensaje)
-
             return redirect('../project/' + str(project.id))
-    return HttpResponse('hola')
+
+
+def addTask(request, methods=['POST']):
+    staff = filtro_usuario(request.POST['staffid'])
+    task = filtro_tarea(request.POST['tasks'])
+    asignar = Assignments.objects.create(staff_member=staff, tasks =task)
+    asignar.save()
+    mensaje = "Tarea agregada exitosamente!"
+    messages.success(request, mensaje)
+    return redirect('manage_team')
+
+    

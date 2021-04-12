@@ -2,7 +2,11 @@
 {% load static %}
 {% block title %}Sesión de trabajo{% endblock %}
 {% block nav %}
-    {% include 'nav-bar.html' %}
+    {% load crispy_forms_tags %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
 {% endblock %}
 {% block header %}
 <header class="text-center m-5">

@@ -79,6 +79,20 @@
     background-color: #ED8F03;
 }
 
+.card {
+    width:300px;
+}
+
 #company-fields {
     display:none;
+}
+
+#staff_photo {
+    width:100px;
+    height:auto;
+    padding:10px;
+}
+
+#form-tareas {
+    display:inline-block;
 }

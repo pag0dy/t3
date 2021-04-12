@@ -3,7 +3,11 @@
 {% block title %} Crear Proyecto{% endblock %}
 {% block nav %}
     {% load crispy_forms_tags %}
-    {% include 'nav-bar.html' %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}
 {% endblock %}
 {% block header %}
 <header class="text-center m-5">

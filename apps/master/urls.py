@@ -8,5 +8,6 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('worksesh', views.worksesh, name='worksesh'),
     path('logout', views.logout, name='logout'),
-    path('team_setup', views.team_setup, name='team_setup')
+    path('team_setup', views.team_setup, name='team_setup'),
+    path('manage_team', views.manage_team, name='manage_team')
 ]

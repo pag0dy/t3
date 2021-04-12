@@ -2,7 +2,11 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {% block nav %}
-    {% include 'nav-bar.html' %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}   
 {% endblock %}
 {% block header %}
     {% include 'header_user.html' %}

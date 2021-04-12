@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Gestión de equipo y tareas{% endblock %}
+{% block nav %}
+    {% load crispy_forms_tags %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}
+{% endblock %}
+{% block header %}
+<header class="text-center m-5">
+    <h3 class="font-main big-font">Gestión de tareas y colaboradores de {{ company.company_name }}</h3>
+</header>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-2">
+        <h3 class="font-main">Colaboradores</h3>
+        <div class="menu">
+            <select class="form-control" name="staff" id="staff_id">
+                <option value="">Staff</option>
+                {% for staff in company.staff_members.all %}
+                <option value="{{ staff.id }}">{{ staff.name }} {{ staff.lastname }}</option>   
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div>            
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+                    {% endfor %}
+                </ul>
+            {% endif %}                   
+        </div>
+    </div>  
+    {% for staff in company.staff_members.all %}
+
+    <div class="col">
+        <div class="content">
+            <div class="card text-dark" id="{{ staff.id }}">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img id="staff_photo" src="{% static 'master/img/staff.png' %}" class="card-img-top" alt="staff photo">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">{{ staff.name }} {{ staff.lastname }}</h5>
+                  <h6 class="card-title">{{ staff.jobtitle }} | {{ staff.get_permission_level_display }}</h6>
+                  <a href="#" class="card-link">Editar Colaborador</a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Tareas asignadas</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for assignment in assignments %} 
+                            {% if staff == assignment.staff_member %}  
+                                <li class="list-group-item"><span class="font-weight-bold">{{ assignment.tasks }}</span> <br>{{ assignment.tasks.project.project_name }}</li> 
+                            {% endif %}                         
+                        {% endfor %}
+                        <form action="{% url 'addTask' %}" method="post">
+                            {% csrf_token %}
+                            <label for="tasks">Selecciona la tarea que quieres asignar</label>
+                            <select name="tasks">
+                                {% for project in company.company_projects.all %}
+                                    {% for task in project.tasks.all %}
+                                        {% if task.assigned_to.staff_member is not staff  %}
+                                            <option value="{{ task.id }}">{{ task.task_name }} - {{ task.project }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            </select>
+                            <div class="card-body">
+                                <input type="hidden" name="staffid" value="{{ staff.id }}">
+                                <button class="btn btn-warning" type="submit">Agregar</button>
+                            </div>
+                        </form>
+                    </ul>
+                </div>        
+                
+            </div>              
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

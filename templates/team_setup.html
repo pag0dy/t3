@@ -2,8 +2,14 @@
 {% load static %}
 {% block title %} Equipo de Trabajo{% endblock %}
 {% block nav %}
+{% block nav %}
     {% load crispy_forms_tags %}
-    {% include 'nav-bar.html' %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}
+{% endblock %}
 {% endblock %}
 {% block header %}
 <header class="text-center m-5">
@@ -40,20 +46,15 @@
                 <th>Detalles</th>
             </thead>
             <tbody class="text-light">
+                {% for staff in company.staff_members.all %}
                 <tr>
-                    <td>Pepito Palotes</td>
-                    <td>Asistente</td>
-                    <td>pepito@palotes.cl</td>
-                    <td>Usuario</td>
+                    <td>{{ staf.name }} {{ staff.lastname}}</td>
+                    <td>{{ staff.jobtitle }}</td>
+                    <td>{{ staff.email }}</td>
+                    <td>{{ staff.permission_level }}</td>
                     <td class="text-center"><a href="#">+</a></td>
                 </tr>
-                <tr>
-                    <td>Fulano DeTal</td>
-                    <td>Coordinador</td>
-                    <td>fulano@detal.cl</td>
-                    <td>Usuario</td>
-                    <td class="text-center"><a href="#">+</a></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

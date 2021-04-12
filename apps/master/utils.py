@@ -29,6 +29,12 @@ def filtro_proyecto(id):
         this_project = project[0]
         return this_project
 
+def filtro_tarea(id):
+    task = Task.objects.filter(id=id)
+    if task:
+        this_task = task[0]
+        return this_task
+
 
 def remove_blanks(string):
     return string.replace(' ', '')
