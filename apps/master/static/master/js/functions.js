@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('.card').hide();
     $('#id_account_type').unbind();
         $('#id_account_type').on('change', function(){
             if($(this).val()=='TA'){
@@ -8,13 +9,10 @@ $(document).ready(function(){
                 $('#company-fields').fadeOut(700);
             }
         })
-        $('#staff_id').on('change', function(){
-            $('.card').hide();
-            $('#' + $(this).val()).fadeIn(700);
-        }).change();
-    $('#tareas').on('click', function(){
-        console.log('click!!');
-        $('#form-tareas').toggle("slow", function(){       
+        $('.more').unbind();
+        $('.more').on('click', function(){
+            console.log($(this).val());
+            $('#'+ $(this).val()).toggle("slow", function(){       
+            });
         });
-    });
 });

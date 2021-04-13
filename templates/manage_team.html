@@ -16,43 +16,34 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-2">
+    <div class="col-6">
         <h3 class="font-main">Colaboradores</h3>
-        <div class="menu">
-            <select class="form-control" name="staff" id="staff_id">
-                <option value="">Staff</option>
-                {% for staff in company.staff_members.all %}
-                <option value="{{ staff.id }}">{{ staff.name }} {{ staff.lastname }}</option>   
-                {% endfor %}
-            </select>
-        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cargo</th>
+                    <th>Nivel de permisos</th>
+                    <th>Gestionar</th>
+                </tr>
+            </thead>
+            {% for staff in company.staff_members.all %}
+            <tbody class="text-light">
+                <tr>
+                    <td>{{ staff.name }} {{ staff.lastname }}</td>
+                    <td>{{ staff.jobtitle}}</td>
+                    <td>{{ staff.get_permission_level_display }}</td>
+                    <td><button class="more btn btn-warning" value="{{ staff.id }}"><i class="bi bi-arrow-bar-right"></i></button></td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
     </div>
     <div class="col">
-        <div>            
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
-                    {% endfor %}
-                </ul>
-            {% endif %}                   
-        </div>
-    </div>  
-    {% for staff in company.staff_members.all %}
-
-    <div class="col">
-        <div class="content">
+        {% for staff in company.staff_members.all %}
             <div class="card text-dark" id="{{ staff.id }}">
-                <div class="d-flex justify-content-center align-items-center">
-                    <img id="staff_photo" src="{% static 'master/img/staff.png' %}" class="card-img-top" alt="staff photo">
-                </div>
                 <div class="card-body">
-                  <h5 class="card-title">{{ staff.name }} {{ staff.lastname }}</h5>
-                  <h6 class="card-title">{{ staff.jobtitle }} | {{ staff.get_permission_level_display }}</h6>
-                  <a href="#" class="card-link">Editar Colaborador</a>
-                </div>
-                <div class="card-body">
-                    <h6 class="card-title">Tareas asignadas</h5>
+                    <h6 class="card-title">Tareas asignadas a {{ staff.name }}</h5>
                     <ul class="list-group list-group-flush">
                         {% for assignment in assignments %} 
                             {% if staff == assignment.staff_member %}  
@@ -77,10 +68,9 @@
                             </div>
                         </form>
                     </ul>
-                </div>        
-                
-            </div>              
-        </div>
-    </div>
-    {% endfor %}
+                </div>               
+            </div> 
+        {% endfor %}
+    </div>   
+</div>
 {% endblock %}

@@ -80,7 +80,8 @@
 }
 
 .card {
-    width:300px;
+    display: none;
+    width:400px;
 }
 
 #company-fields {
