@@ -1,5 +1,12 @@
 from ..users.models import User, Company
 from ..tasks.models import Project, Task, Assignments
+from .models import WorkSession
+
+def filtro_worksesh(id):
+    worksesh = WorkSession.objects.filter(id=id)
+    if worksesh:
+        worksesh = worksesh[0]
+        return worksesh
 
 def filtro_usuario(id_usuario):
     activo = User.objects.filter(id = id_usuario)

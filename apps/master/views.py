@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect, HttpResponse
 from ..users.forms import RegistrationForm, LoginForm, CompanyForm, AddStaffForm
 from ..users.models import User, Company
 from ..tasks.models import Assignments, Project, Task
+from .models import WorkSession
 from django.contrib import messages
-from .utils import filtro_usuario, filtro_usuario_email, filtro_empresa, remove_blanks
+from .utils import filtro_usuario, filtro_usuario_email, filtro_empresa, remove_blanks, filtro_worksesh
 import bcrypt
 
 def crearSesion(request, usuario):
     request.session['id'] = usuario.id
+    request.session['nombre'] = usuario.name
     print('Sesión creada')
     return True
 
@@ -139,8 +141,44 @@ def manage_team(request):
         }
         return render(request, 'manage_team.html', context)
 
-
 def worksesh(request):
-    if 'id' in request.session:
-        this_user = filtro_usuario(request.session['id'])
-    return render(request, 'worksesh.html', {'user':this_user})
+    if 'active_worksesh' in request.session:
+        if 'company' in request.session:
+            user = filtro_usuario(request.session['id'])
+            company =filtro_empresa(request.session['company'])
+            assigments = Assignments.objects.filter(staff_member=user)
+            active_sesh = filtro_worksesh(request.session['active_worksesh'])
+            context = {
+                'user': user,
+                'assignments':assigments,
+                'active_worksesh':active_sesh
+            }
+            return render(request, 'worksesh.html', context)
+    else:
+        if 'company' in request.session:
+            user = filtro_usuario(request.session['id'])
+            company =filtro_empresa(request.session['company'])
+            assigments = Assignments.objects.filter(staff_member=user)
+            context = {
+                'user': user,
+                'assignments':assigments,
+            }
+            return render(request, 'worksesh.html', context)
+
+
+
+def startworksesh(request, methods=['POST']):
+    assignment = Assignments.objects.get(id=request.POST['this_assignment'])
+    new_worksesh = WorkSession.objects.create(assignment=assignment)
+    assignment.status = 'IP'
+    request.session['active_worksesh'] = new_worksesh.id
+    return redirect('worksesh')
+
+
+def stopworksesh(request, methods=['POST']):
+    if 'active_worksesh' in request.session:
+        active_sesh = filtro_worksesh(request.session['active_worksesh'])
+        active_sesh.assignment.status = 'OH'
+        active_sesh.save()
+        del request.session['active_worksesh']
+        return redirect('worksesh')
