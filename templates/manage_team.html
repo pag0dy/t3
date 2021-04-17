@@ -41,7 +41,7 @@
     </div>
     <div class="col">
         {% for staff in company.staff_members.all %}
-            <div class="card text-dark" id="{{ staff.id }}">
+            <div class="card hidecard text-dark" id="{{ staff.id }}">
                 <div class="card-body">
                     <h6 class="card-title">Tareas asignadas a {{ staff.name }}</h5>
                     <ul class="list-group list-group-flush">

@@ -12,37 +12,42 @@
     {% include 'header_user.html' %}
 {% endblock %}
 {% block content %}
-    <div class="col ml-3">
-        <h3 class="font-main">Tus proyectos</h3>
-        <table class="table table-striped table-bordered font-secondary">
-            <thead class="thead-dark">
-                <th>Proyecto</th>
-                <th>Cliente</th>
-                <th>Fecha de inicio</th>
-                <th>Fecha de término</th>
-            </thead>
-            <tbody class="text-light">
-                <tr>
-                    <td>Asesoría MINVU</td>
-                    <td>MINVU</td>
-                    <td>09/09/2020</td>
-                    <td>09/12/2021</td>
-                </tr>
-                <tr>
-                    <td>Capacitación Inmobiliaria X</td>
-                    <td>Inmobiliaria X</td>
-                    <td>01/11/2020</td>
-                    <td>10/12/2021</td>
-                </tr>
-                <tr>
-                    <td>Asesoría Constructora X</td>
-                    <td>Constructora X</td>
-                    <td>05/05/2020</td>
-                    <td>05/05/2021</td>
-                </tr>
-            </tbody>
-        </table>
-        <a class="btn btn-warning" href="{% url 'createProject' %}">Crear un nuevo proyecto</a>
-    </div>
+<div class="row row-cols-2 pb-2">
+  <div class="col">
+    <h3 class="font-main big-font text-left">Resumen</h3>
+  </div>
+  <div class="col-6 d-flex">
+    <h3 class="font-main big-font text-left">Tus últimas sesiones de trabajo</h3>
+  </div>
 </div>
+<div class="row">
+  <div class="col-4">
+    <ul class="list-group pb-2">
+      {% if projects %}
+        <h3 class="font-main medium-font text-left">Proyectos que lideras:</h3>
+        {% for project in projects %}
+        <li class="list-group-item font-secondary">{{  project.project_name }}</li>       
+        {% endfor %}    
+      {% endif %}   
+    </ul>
+    <ul class="list-group">
+        <h3 class="font-main medium-font text-left">Tus tareas:</h3>
+        {% for assignment in assignments %}
+        <li class="list-group-item font-secondary">{{  assignment.tasks.task_name }}</li>       
+        {% endfor %}     
+    </ul>
+  </div>
+  <div class="col-6 d-flex">
+    {% for worksession in worksessions %}
+      <div class="session_card">
+        <h3 class="session_card_title font-secondary">{{ worksession.assignment.tasks.task_name }}</h3>
+        <hr class="mx-3">
+        <p class="session_card_body font-secondary"><span class="font-weight-bold">Proyecto:</span>{{ worksession.assignment.tasks.project }}</p>
+        <hr class="mx-3">
+        <p class="session_card_body font-secondary text-center">{{ worksession.startTime|date:"SHORT_DATETIME_FORMAT" }} | {{ worksession.stopTime|date:"SHORT_DATETIME_FORMAT" }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
 {% endblock %}

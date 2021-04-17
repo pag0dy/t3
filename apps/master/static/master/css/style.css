@@ -1,15 +1,14 @@
 * {
     padding:0;
     margin:0;
-    border:0;
 }
 
 .font-main {
-    font-family: 'Advent Pro', sans-serif;
+    font-family: 'Ubuntu Mono', monospace;
 }
 
 .font-secondary {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Code Pro', monospace
 }
 
 .bg-dark-grad {
@@ -19,16 +18,16 @@
 }
 
 .bg-light-grad {
-    background: #eacda3;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #d6ae7b, #eacda3);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #d6ae7b, #eacda3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+    background: #ECE9E6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .orange_color {
-    color:#ED8F03;
+    color:#ff6633;
 }
 
-.blue_color {
+.blue-color {
     color: #243B55;
 }
 
@@ -42,23 +41,28 @@
 
 .jumbo-font {
     font-size: 200px;
-    text-shadow: 5px 5px #ED8F03;
+    text-shadow: 3px 3px #ff6633;
+    letter-spacing: -1px;
 }
 
 .big-font {
     font-size: 32px;
 }
 
+.medium-font {
+    font-size: 24px;
+}
+
 .header-font {
-    color: whitesmoke;
+    color: #141E30;
     font-size: 86px;
-    text-shadow: 5px 5px #ED8F03;
+    text-shadow: 2px 2px #ff6633;
 }
 
 .header-font:hover {
-    color: #ED8F03;
+    color: #ff6633;
     font-size: 86px;
-    text-shadow: 5px 5px whitesmoke;
+    text-shadow: 3px 3px whitesmoke;
     text-decoration: none;
 }
 
@@ -68,20 +72,69 @@
 
 .main-img {
     width:80%;
-    height:auto;
-    background-color: rgba(255, 250, 250, 0.2);
+    height:auto;   
     padding:10px;
-    border-radius: 20px;
-    box-shadow: 5px 5px #ED8F03;
 }
 
-.bg-orange {
-    background-color: #ED8F03;
+.btn-orange {
+    padding: 10px 12px;
+    width: fit-content;
+    height:auto;
+    font-size: 21px;
+    background: #ff6633;
+    color: whitesmoke; 
+    border-radius: 5px;  
+    box-shadow: 2px 2px 2px #343a40;
+}
+
+.btn-orange:hover {
+    padding: 10px 12px;
+    width: fit-content;
+    height:auto;
+    font-size: 21px;
+    background: #ff6633;
+    color: whitesmoke; 
+    border-radius: 5px;  
+}
+
+.btn-dark-blue {
+    padding: 10px 12px;
+    width: fit-content;
+    height:auto;
+    font-size: 21px;
+    background: #343a40;
+    color: whitesmoke; 
+    border-radius: 5px; 
+    box-shadow: 1px 1px 5px #ff6633; 
+}
+
+.btn-dark-blue:hover {
+    padding: 10px 12px;
+    width: fit-content;
+    height:auto;
+    font-size: 21px;
+    text-decoration: none;
+    background: #ff6633;
+    color: whitesmoke; 
+    border-radius: 5px; 
+    box-shadow: 1px 1px 5px #343a40; 
+}
+
+.bg-light {
+    background-color: #ECE9E6;
+}
+
+.bg-dark {
+    background-color: #243B55;
+}
+
+.hidecard {
+    display: none;
+    width:400px;
 }
 
 .card {
-    display: none;
-    width:400px;
+    width:300px;
 }
 
 #company-fields {
@@ -96,4 +149,30 @@
 
 #form-tareas {
     display:inline-block;
+}
+
+.session_card {
+    min-width:50%;
+    max-width: fit-content;
+    height: auto;
+    border: solid 6px #141E30;
+    border-radius: 25px;
+    box-shadow: 5px 5px 5px grey;
+    background-color: white;
+    margin: 10px;
+}
+
+.session_card_title {
+    font-size: 1.5vw;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.session_card_body {
+    font-size: 1vw;
+    margin: 10px;
+}
+
+.side-info {
+    width: fit-content;
 }

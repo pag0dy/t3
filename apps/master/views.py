@@ -16,9 +16,30 @@ def crearSesion(request, usuario):
 NoCompany = Company.objects.get(id=1)
 
 def home(request):
-    if 'id' in request.session:
-        this_user = filtro_usuario(request.session['id'])
-    return render(request, 'home.html', {'user':this_user})
+    this_user = filtro_usuario(request.session['id'])
+
+    assignments = Assignments.objects.filter(staff_member=this_user)
+    worksessions = WorkSession.objects.filter(assignment__staff_member=this_user).order_by('-stopTime')[:3]
+    print(worksessions)
+    if 'company' in request.session:
+        company =filtro_empresa(request.session['company'])
+        projects = Project.objects.filter(company=company, project_lead=this_user)
+        context = {
+            'user': this_user,
+            'company':company,
+            'worksessions':worksessions,
+            'assignments': assignments,
+            'projects': projects
+        }
+        
+    else: 
+        context = {
+            'user':this_user,
+            'worksessions':worksessions,
+            'assignments': assignments
+        }
+    print(context)
+    return render(request, 'home.html', context)
 
 def login(request):
     if request.method == 'POST':

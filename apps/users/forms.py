@@ -48,6 +48,46 @@ class RegistrationForm(forms.ModelForm):
         data = self.cleaned_data['email']
 
 
+class EditUserForm(forms.ModelForm):
+    confirmpass = forms.CharField(max_length=80, label='Confirmar contraseña', widget= forms.PasswordInput())
+    widgets = {
+        'confirmpass' : forms.PasswordInput()
+    }
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+        }),
+        error_messages={'invalid': 'Por favor ingrese un email válido'}
+    )
+
+    class Meta:
+        model = User
+        fields = ['name', 'lastname', 'password']
+
+        widgets = {
+            'password' : forms.PasswordInput()
+        }
+
+        labels = {
+            'name': 'Nombre',
+            'lastname': 'Apellido',
+            'password': 'Contraseña'
+        }
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        confirm =  self.data['confirmpass']
+        errors = []
+        errors.append(confirm_pass(data, confirm))
+        if errors == [None]:
+            return data
+        else:
+            raise ValidationError(errors)
+
+    def clean_user(self):
+        data = self.cleaned_data['email']
+
+
 class LoginForm(forms.ModelForm):
     class Meta:
         model = User

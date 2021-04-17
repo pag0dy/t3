@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Empresa{% endblock %}
+{% block nav %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}   
+{% endblock %}
+{% block header %}
+    {% include 'header_user.html' %}
+{% endblock %}
+{% block content %}
+<div class="row row-cols-2 pb-2">
+  <div class="col-3">
+    <h3 class="font-main big-font text-left">Empresa</h3>
+  </div>
+  <div class="col-3 d-flex">
+    <h3 class="font-main big-font text-left">Proyectos</h3>
+  </div>
+  <div class="col-4 d-flex">
+    <h3 class="font-main big-font text-left">Colaboradores</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <ul class="list-group pb-2">
+        <h3 class="font-main medium-font text-left">Nombre:</h3>
+        <li class="list-group-item font-secondary">{{  company.company_name }}</li>        
+    </ul>
+    <ul class="list-group">
+        <h3 class="font-main medium-font text-left">N° de Colaboradores:</h3>
+        <li class="list-group-item font-secondary">{{  company.n_workers }}</li>         
+    </ul>
+    <a class="btn-dark-blue" href="#">Editar Empresa</a>
+  </div>
+  <div class="col-3 d-flex">
+    {% for project in company.company_projects.all %}
+      <div class="session_card">
+        <h3 class="session_card_title font-secondary"><a href="{% url 'project' id=project.id %}">{{ project.project_name }}</a></h3>
+        <hr class="mx-3">
+        <p class="session_card_body font-secondary"><span class="font-weight-bold">Líder:</span>{{ project.project_lead }}</p>
+        <hr class="mx-3">
+        <p class="session_card_body font-secondary text-center">{{ project.startDate }} | {{ project.endDate }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="col-4 d-flex">
+    {% for staff in company.staff_members.all %}
+    <div class="session_card">
+      <h3 class="session_card_title font-secondary"><a href="{% url 'staff_info' id=staff.id %}">{{ staff.name }} {{ staff.lastname }} </a></h3>
+      <hr class="mx-3">
+      <p class="session_card_body font-secondary"><span class="font-weight-bold">Cargo:</span>{{ staff.jobtitle }}</p>
+      <hr class="mx-3">
+      <p class="session_card_body font-secondary text-center"><span class="font-weight-bold">Correo:</span>{{ staff.email }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

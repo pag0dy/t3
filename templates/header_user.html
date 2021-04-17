@@ -2,9 +2,8 @@
 {% load static %}
 {% block header %}
 <div class="container">
-  <div class="row align-items-center justify-content-center my-1">
-    <a class="font-main header-font mr-5" href="{% url 'index' %}">t<sup>3</sup></a>
-    <h3 class="font-main subheader-font orange_color">Hola, {{ user.name }}</h3>
+  <div class="row my-1">
+    <h3 class="font-main dark-grey subheader-font">Hola, {{ user.name }}</h3>
   </div>
 </div>
 {% endblock %}

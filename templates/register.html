@@ -40,7 +40,7 @@
                     {{ reg_form.confirmpass|as_crispy_field }}
                 </div>
             </div>
-            <div class="form-row" id="company-fields">
+            <div class="form-row align-items-baseline" id="company-fields">
                 <div class="form-group col">
                     {{ company_form.company_name|as_crispy_field}}
                 </div>
@@ -52,7 +52,7 @@
         </form>
     </div>
     <div class="col w-25 text-center">  
-        <img class="main-img" src="{% static 'master/img/undraw_Forms_re_pkrt.svg' %}" alt="Forms">
+        <img class="main-img" src="{% static 'master/img/t3_register.png' %}" alt="Forms">
         <p class="font-secondary my-2">Si ya tienes una cuenta, inicia sesión <a href="{% url 'login' %}">aquí!</a></p>   
     </div>
 </div>

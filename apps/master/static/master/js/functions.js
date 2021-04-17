@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('.card').hide();
+    $('.hidecard').hide();
     $('#id_account_type').unbind();
         $('#id_account_type').on('change', function(){
             if($(this).val()=='TA'){
