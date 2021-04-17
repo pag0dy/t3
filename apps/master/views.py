@@ -6,6 +6,7 @@ from .models import WorkSession
 from django.contrib import messages
 from .utils import filtro_usuario, filtro_usuario_email, filtro_empresa, remove_blanks, filtro_worksesh
 import bcrypt
+from datetime import date
 
 def crearSesion(request, usuario):
     request.session['id'] = usuario.id
@@ -168,11 +169,27 @@ def worksesh(request):
             user = filtro_usuario(request.session['id'])
             company =filtro_empresa(request.session['company'])
             assigments = Assignments.objects.filter(staff_member=user)
+            today = date.today()
+            print(today)
             active_sesh = filtro_worksesh(request.session['active_worksesh'])
+            print(active_sesh.assignment.status)
+            todays_seshs=[]
+            btn_class='btn-danger'
+            action_post = 'stopworksesh'
+            for assigment in assigments:
+                for worksession in assigment.worksessions.all():
+                    if worksession.startTime.date() == today:
+                        todays_seshs.append(worksession)
+                    else:
+                        pass
             context = {
                 'user': user,
                 'assignments':assigments,
-                'active_worksesh':active_sesh
+                'active_worksesh':active_sesh,
+                'todays_seshs':todays_seshs,
+                'btn_class': btn_class,
+                'action_post':action_post
+
             }
             return render(request, 'worksesh.html', context)
     else:
@@ -180,9 +197,22 @@ def worksesh(request):
             user = filtro_usuario(request.session['id'])
             company =filtro_empresa(request.session['company'])
             assigments = Assignments.objects.filter(staff_member=user)
+            today = date.today()
+            todays_seshs=[]
+            btn_class='btn-success'
+            action_post = 'startworksesh'
+            for assigment in assigments:
+                for worksession in assigment.worksessions.all():
+                    if worksession.startTime.date() == today:
+                        todays_seshs.append(worksession)
+                    else:
+                        pass
             context = {
                 'user': user,
                 'assignments':assigments,
+                'todays_seshs':todays_seshs,
+                'btn_class': btn_class,
+                'action_post':action_post
             }
             return render(request, 'worksesh.html', context)
 
@@ -192,7 +222,9 @@ def startworksesh(request, methods=['POST']):
     assignment = Assignments.objects.get(id=request.POST['this_assignment'])
     new_worksesh = WorkSession.objects.create(assignment=assignment)
     assignment.status = 'IP'
+    print(assignment.status)
     request.session['active_worksesh'] = new_worksesh.id
+    print('comenzó una sesh')
     return redirect('worksesh')
 
 
@@ -200,6 +232,10 @@ def stopworksesh(request, methods=['POST']):
     if 'active_worksesh' in request.session:
         active_sesh = filtro_worksesh(request.session['active_worksesh'])
         active_sesh.assignment.status = 'OH'
+        print(active_sesh.assignment.status)
+        active_sesh.save()
+        active_sesh.duration = str(active_sesh.stopTime - active_sesh.startTime)
         active_sesh.save()
         del request.session['active_worksesh']
+        print('terminó una sesh')
         return redirect('worksesh')

@@ -15,53 +15,49 @@
 </header>
 {% endblock %}
 {% block content %}
-    <div>
+<div class="row">
+    <div class="col d-inline-block align-items-center">
         <h3 class="font-main">Comienza a trabajar en una de tus tareas</h3>
-        <form action="startworksesh" method="post">
-            {% csrf_token %}
-            <div class="form-group row">
-                    <label for="this_assignment">Tarea:</label>
-                    <select class="form-control" name="this_assignment" id="this_assignment">
-                        {% for assignment in assignments %}
-                            <option value="{{ assignment.id }}">{{ assignment.tasks.task_name}} - {{ assignment.tasks.project.project_name }}</option>
-                        {% endfor %}
-                    </select>
-                <div class="col mt-4">
-                    <button type="submit" class="btn btn-success"><i class="bi bi-caret-right"></i></button>
-                </div>
-            </div>
-        </form>
-        <form action="stopworksesh" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger"><i class="bi bi-stop"></i></button>
-        </form>  
+        <div class="form-inline">
+            <form id="sesh_form" action="{{ action_post}}" method="post">
+                {% csrf_token %}
+                <label class="text-left" for="this_assignment">Tarea:</label>
+                <select class="form-control" name="this_assignment" id="this_assignment">
+                    {% for assignment in assignments %}
+                        <option value="{{ assignment.id }}">{{ assignment.tasks.task_name}} - {{ assignment.tasks.project.project_name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="sesh_control" type="submit" class="btn {{ btn_class }}"><i class="bi bi-alarm-fill"></i></button>
+            </form>
+        </div>
     </div>
-    <div class="row mt-5">
-        <h3 class="font-main">Sesiones de trabajo recientes</h3>
+    <div class="col">
+        <h3 class="font-main">Tu sesiones de trabajo de hoy</h3>
         <table class="table table-striped">
             <thead class="thead-dark">
                 <th>Id</th>
                 <th>Tarea</th>
                 <th>Proyecto</th>
                 <th>Duración</th>
-                <th>Detalles</th>
+                <th>Comentarios</th>
             </thead>
-            <tbody class="text-light">
-
-                    {% for assignment in assignments %}
-                        {% for worksession in assignment.worksessions.all %}
-                        <tr>
-                            <td>{{ worksession.id }}</td>
-                            <td>{{ assignment.tasks.task_name }}</td>
-                            <td>{{ assignment.tasks.project }}</td>
-                            <td>{{ worksession.startTime }}</td>
-                            <td>{{ worksession.stopTime }}</td>   
-                        </tr>   
-                        {% endfor %}
+            <tbody class="text-dark">
+                
+                {% if todays_seshs %}
+                    {% for sesh in todays_seshs %}
+                    <tr>
+                        <td>{{ sesh.id }}</td>
+                        <td>{{ sesh.assignment.tasks.task_name }}</td>
+                        <td>{{ sesh.assignment.tasks.project }}</td>
+                        <td>{{ sesh.duration }}</td> 
+                        <td>{{ sesh.comments }}</td>
+                    </tr>       
                     {% endfor %}
-
+                    {% else %}  
+                        <td colspan="5">Hoy no has iniciado ninguna sesión de trabajo</td> 
+                {% endif %}
             </tbody>
         </table>
     </div>
-</div>
+</div>  
 {% endblock %}

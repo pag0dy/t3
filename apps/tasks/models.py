@@ -36,13 +36,13 @@ class Assignments(models.Model):
     ('IP', 'In Progress'),
     ('BL', 'Backlog'),
     ('OH', 'On Hold'),
-    ('BL', 'Blocked'),
+    ('BD', 'Blocked'),
     ('DM', 'Dismissed')
     )
 
     staff_member = models.ForeignKey(User, on_delete=models.CASCADE)
     tasks = models.ForeignKey(Task, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100, choices=STATUS, default='BL' )
+    status = models.CharField(max_length=100, choices=STATUS, default='BL')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

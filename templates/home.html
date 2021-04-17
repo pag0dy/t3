@@ -44,7 +44,7 @@
         <hr class="mx-3">
         <p class="session_card_body font-secondary"><span class="font-weight-bold">Proyecto:</span>{{ worksession.assignment.tasks.project }}</p>
         <hr class="mx-3">
-        <p class="session_card_body font-secondary text-center">{{ worksession.startTime|date:"SHORT_DATETIME_FORMAT" }} | {{ worksession.stopTime|date:"SHORT_DATETIME_FORMAT" }}</p>
+        <p class="session_card_body font-secondary text-center">{{ worksession.duration }}</p>
       </div>
     {% endfor %}
   </div>

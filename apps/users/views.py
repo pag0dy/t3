@@ -12,8 +12,16 @@ def user(request):
 def editarperfil(request):
     this_user = filtro_usuario(request.session['id'])
     if request.method == 'GET':
-        editform = EditUserForm()
-        return render(request, 'editarperfil.html', {'editform':editform})
+        editform = EditUserForm(initial={
+            'name':this_user.name,
+            'lastname':this_user.lastname,
+            'email':this_user.email,
+        })
+        context = {
+            'user':this_user,
+            'editform':editform
+        }
+        return render(request, 'editarperfil.html', context)
     else:
         return Http('editar perfil')
 
