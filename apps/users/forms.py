@@ -33,7 +33,6 @@ class RegistrationForm(forms.ModelForm):
             'password': 'Contraseña'
         }
 
-
     def clean_password(self):
         data = self.cleaned_data['password']
         confirm =  self.data['confirmpass']
@@ -47,12 +46,7 @@ class RegistrationForm(forms.ModelForm):
     def clean_user(self):
         data = self.cleaned_data['email']
 
-
 class EditUserForm(forms.ModelForm):
-    confirmpass = forms.CharField(max_length=80, label='Confirmar contraseña', widget= forms.PasswordInput())
-    widgets = {
-        'confirmpass' : forms.PasswordInput()
-    }
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
@@ -62,15 +56,32 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['name', 'lastname', 'password']
+        fields = ['name', 'lastname', 'email']
+
+
+        labels = {
+            'name': 'Nombre',
+            'lastname': 'Apellido',
+        }
+
+    def clean_user(self):
+        data = self.cleaned_data['email']
+
+class EditPassForm(forms.ModelForm):
+    confirmpass = forms.CharField(max_length=80, label='Confirmar contraseña', widget= forms.PasswordInput())
+    widgets = {
+        'confirmpass' : forms.PasswordInput()
+    }
+
+    class Meta:
+        model = User
+        fields = ['password']
 
         widgets = {
             'password' : forms.PasswordInput()
         }
 
         labels = {
-            'name': 'Nombre',
-            'lastname': 'Apellido',
             'password': 'Contraseña'
         }
 
@@ -83,10 +94,6 @@ class EditUserForm(forms.ModelForm):
             return data
         else:
             raise ValidationError(errors)
-
-    def clean_user(self):
-        data = self.cleaned_data['email']
-
 
 class LoginForm(forms.ModelForm):
     class Meta:
@@ -102,7 +109,7 @@ class LoginForm(forms.ModelForm):
         }
 
 
-class AddStaffForm(forms.ModelForm):
+class StaffForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['name', 'lastname', 'email', 'jobtitle', 'permission_level']

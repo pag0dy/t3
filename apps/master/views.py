@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from ..users.forms import RegistrationForm, LoginForm, CompanyForm, AddStaffForm
+from ..users.forms import RegistrationForm, LoginForm, CompanyForm, StaffForm
 from ..users.models import User, Company
 from ..tasks.models import Assignments, Project, Task
 from .models import WorkSession
@@ -11,6 +11,7 @@ from datetime import date
 def crearSesion(request, usuario):
     request.session['id'] = usuario.id
     request.session['nombre'] = usuario.name
+    request.session['permission_level'] = usuario.permission_level
     print('Sesión creada')
     return True
 
@@ -39,7 +40,7 @@ def home(request):
             'worksessions':worksessions,
             'assignments': assignments
         }
-    print(context)
+
     return render(request, 'home.html', context)
 
 def login(request):
@@ -113,7 +114,7 @@ def logout(request):
 
 def team_setup(request):
     if request.method == 'GET':
-        form = AddStaffForm()
+        form = StaffForm()
         company = filtro_empresa(request.session['company'])
         context = {
             'form':form, 
@@ -122,7 +123,7 @@ def team_setup(request):
         return render(request, 'team_setup.html', context)
 
     else:
-        form = AddStaffForm(request.POST)
+        form = StaffForm(request.POST)
         if form.is_valid():
             nuevo_staff = form.save(commit=False)
             empresa = filtro_empresa(request.session['company'])
@@ -141,13 +142,13 @@ def team_setup(request):
                 nuevo_staff.company = empresa
                 nuevo_staff.save()
                 mensaje = "Colaborador agregado exitosamente!"
-                messages.success(request, mensaje )
+                messages.success(request, mensaje)
                 return redirect('team_setup')
 
 
         else:
             context = {
-                'form': AddStaffForm()
+                'form': StaffForm()
             }
             return render(request, 'team_setup.html', {'form':form})
 
@@ -234,7 +235,7 @@ def stopworksesh(request, methods=['POST']):
         active_sesh.assignment.status = 'OH'
         print(active_sesh.assignment.status)
         active_sesh.save()
-        active_sesh.duration = str(active_sesh.stopTime - active_sesh.startTime)
+        active_sesh.duration = active_sesh.stopTime - active_sesh.startTime
         active_sesh.save()
         del request.session['active_worksesh']
         print('terminó una sesh')

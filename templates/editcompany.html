@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Empresa{% endblock %}
+{% block nav %}
+  {% load crispy_forms_tags %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+    {% endif %}   
+{% endblock %}
+{% block header %}
+    {% include 'header_user.html' %}
+{% endblock %}
+{% block content %}
+<div class="row row-cols-2 pb-2">
+  <div class="col-3">
+    <h3 class="font-main big-font text-left">Empresa</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <form action="{% url 'editcompany' %}" method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button class="btn btn-warning" type="submit">Editar Empresa</button>
+    </form>
+  </div>
+  <div class="col-3">
+    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
+      <a class="btn-dark-blue" href="{% url 'createProject' %}">Agregar proyecto</a>
+    {% endif %}
+    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
+      <a class="btn-dark-blue" href="{% url 'team_setup' %}">Agregar colaborador</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

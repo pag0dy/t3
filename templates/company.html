@@ -14,6 +14,13 @@
 {% block content %}
 <div class="row row-cols-2 pb-2">
   <div class="col-3">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+        {% endfor %}
+    </ul>
+    {% endif %}    
     <h3 class="font-main big-font text-left">Empresa</h3>
   </div>
   <div class="col-3 d-flex">
@@ -33,9 +40,11 @@
         <h3 class="font-main medium-font text-left">N° de Colaboradores:</h3>
         <li class="list-group-item font-secondary">{{  company.n_workers }}</li>         
     </ul>
-    <a class="btn-dark-blue" href="#">Editar Empresa</a>
+    {% if user.permission_level == 'a' %}
+      <a class="btn-dark-blue" href="{% url 'editcompany' %}">Editar Empresa</a>
+    {% endif %}
   </div>
-  <div class="col-3 d-flex">
+  <div class="col-3">
     {% for project in company.company_projects.all %}
       <div class="session_card">
         <h3 class="session_card_title font-secondary"><a href="{% url 'project' id=project.id %}">{{ project.project_name }}</a></h3>
@@ -45,18 +54,25 @@
         <p class="session_card_body font-secondary text-center">{{ project.startDate }} | {{ project.endDate }}</p>
       </div>
     {% endfor %}
+    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
+      <a class="btn-dark-blue" href="{% url 'createProject' %}">Agregar proyecto</a>
+    {% endif %}
   </div>
-  <div class="col-4 d-flex">
-    {% for staff in company.staff_members.all %}
+  <div class="col-5">
+    {% for staff in company.staff_members.all %}  
+    {% if staff != user %}
     <div class="session_card">
       <h3 class="session_card_title font-secondary"><a href="{% url 'staff_info' id=staff.id %}">{{ staff.name }} {{ staff.lastname }} </a></h3>
       <hr class="mx-3">
       <p class="session_card_body font-secondary"><span class="font-weight-bold">Cargo:</span>{{ staff.jobtitle }}</p>
       <hr class="mx-3">
       <p class="session_card_body font-secondary text-center"><span class="font-weight-bold">Correo:</span>{{ staff.email }}</p>
-    </div>
+    </div>    
+    {% endif %}
     {% endfor %}
+    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
+      <a class="btn-dark-blue" href="{% url 'team_setup' %}">Agregar colaborador</a>
+    {% endif %}
   </div>
 </div>
-
 {% endblock %}

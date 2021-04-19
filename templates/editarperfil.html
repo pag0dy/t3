@@ -23,13 +23,18 @@
 </div>
 <div class="row">
   <div class="col-4">
-    <form action="ediarpefil" method="post">
+    <form action="editarperfil" method="post">
       {% csrf_token %}
       {{ editform|crispy }}
-      <a class="btn-dark-blue" href="{% url 'editarperfil' %}">Editar mi información</a>
+      <button class="btn-dark-blue" type="submit">Editar mi información</button>
     </form>
   </div>
-  <div class="col-6 d-flex">
+  <div class="col-4">
+    <form action="editarpass" method="post">
+      {% csrf_token %}
+      {{ editpass|crispy }}
+      <button class="btn-dark-blue" type="submit">Cambiar mi contraseña</button>
+    </form>
   </div>
 </div>
 

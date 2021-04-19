@@ -15,28 +15,27 @@
 </header>
 {% endblock %}
 {% block content %}
-<div class="row">
+<div class="row mb-2">
     <div class="col">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-transparent">Cliente: {{ project.client }}</li>
-            <li class="list-group-item bg-transparent">Fecha de Inicio: {{ project.startDate }}</li>
-            <li class="list-group-item bg-transparent">Fecha de Término: {{ project.endDate }}</li>
-            <li class="list-group-item bg-transparent">Horas Asignadas: {{ project.hours_assigned }}</li>
-            <li class="list-group-item bg-transparent">Responsable: {{ project.project_lead }}</li>
-            <li class="list-group-item bg-transparent">Tareas asociadas:</li>
-            <ul class="list-group">           
+        <ul class="list-group w-50">
+            <li class="list-group-item">Cliente: {{ project.client }}</li>
+            <li class="list-group-item">Fecha de Inicio: {{ project.startDate }}</li>
+            <li class="list-group-item">Fecha de Término: {{ project.endDate }}</li>
+            <li class="list-group-item">Horas Asignadas: {{ project.hours_assigned }}</li>
+            <li class="list-group-item">Responsable: {{ project.project_lead }}</li>
+            <li class="list-group-item">Tareas asociadas:</li>
+            <ul class="list-group list-group-flush">           
                 {% if project.tasks %}
                     {% for task in project.tasks.all %}
-                    <li class="list-group-item bg-transparent">{{ task.task_name }}</li>                  
+                    <li class="list-group-item list-group-item-secondary">{{ task.task_name }}</li>                  
                     {% endfor %}
                 {% else %}    
                     <p class="font-secondary font-italic">Aún no tienes tareas asociadas a este proyecto.</p>
                 {% endif %}
-                    
-
             </ul>
         </ul>
     </div>
+    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
     <div class="col">
         <div>            
             {% if messages %}
@@ -53,6 +52,7 @@
             {{ form|crispy }}
             <button class="btn btn-warning" type="submit">Agregar</button>
         </form>
-    </div>
+    </div>     
+    {% endif %}
 </div>
 {% endblock %}

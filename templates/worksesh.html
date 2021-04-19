@@ -48,9 +48,13 @@
                     <tr>
                         <td>{{ sesh.id }}</td>
                         <td>{{ sesh.assignment.tasks.task_name }}</td>
-                        <td>{{ sesh.assignment.tasks.project }}</td>
-                        <td>{{ sesh.duration }}</td> 
-                        <td>{{ sesh.comments }}</td>
+                        <td>{{ sesh.assignment.tasks.project }}</td>           
+                        <td>{{ sesh.duration }}</td>                
+                            {% if sesh == active_worksesh %}                        
+                                <td class='bg-success'>En curso</td>
+                            {% else %}
+                                <td>Sin comentarios</td>
+                            {% endif %}                         
                     </tr>       
                     {% endfor %}
                     {% else %}  

@@ -20,7 +20,7 @@ class UserManager(models.Manager):
         return errors
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=100)
+    company_name = models.CharField(max_length=100, validators = [MinLengthValidator(limit_value = 2, message = 'El nombre debe tener más de dos caracteres')])
     n_workers = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -41,12 +41,12 @@ class User(models.Model):
         ('TA', 'Team Account')
     )
 
-    name = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    jobtitle = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, validators = [MinLengthValidator(limit_value = 2, message = 'El nombre debe tener más de dos caracteres')])
+    lastname = models.CharField(max_length=100, validators =[MinLengthValidator(limit_value = 2, message ='El apellido debe tener más de dos caracteres')])
+    jobtitle = models.CharField(max_length=100, validators =[MinLengthValidator(limit_value = 3, message ='El cargo debe tener más de tres caracteres')])
     account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPES, default='SU')
-    email = models.EmailField()
-    password = models.CharField(max_length=80)
+    email = models.EmailField(validators=[EmailValidator(message = 'Por favor ingrese un correo válido')])
+    password = models.CharField(max_length=80, validators =[MinLengthValidator(limit_value = 8, message ='La contraseña debe tener más de ocho caracteres')])
     permission_level = models.CharField(max_length=1, choices=LEVELS)
     company = models.ForeignKey(Company, related_name='staff_members', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

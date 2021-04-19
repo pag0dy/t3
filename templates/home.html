@@ -14,10 +14,17 @@
 {% block content %}
 <div class="row row-cols-2 pb-2">
   <div class="col">
-    <h3 class="font-main big-font text-left">Resumen</h3>
+    <h3 class="font-main big-font text-left">Asignaciones</h3>
+    {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+                {% endfor %}
+            </ul>
+        {% endif %}        
   </div>
-  <div class="col-6 d-flex">
-    <h3 class="font-main big-font text-left">Tus últimas sesiones de trabajo</h3>
+  <div class="col-6 d-flex justify-content-end text-left">
+    <h3 class="font-main big-font">Tus últimas sesiones de trabajo</h3>
   </div>
 </div>
 <div class="row">
@@ -33,11 +40,13 @@
     <ul class="list-group">
         <h3 class="font-main medium-font text-left">Tus tareas:</h3>
         {% for assignment in assignments %}
+        <h3>{{ assignment.tasks.project.project_name}}</h3>
         <li class="list-group-item font-secondary">{{  assignment.tasks.task_name }}</li>       
         {% endfor %}     
     </ul>
   </div>
   <div class="col-6 d-flex">
+    {% if worksessions %}
     {% for worksession in worksessions %}
       <div class="session_card">
         <h3 class="session_card_title font-secondary">{{ worksession.assignment.tasks.task_name }}</h3>
@@ -46,8 +55,12 @@
         <hr class="mx-3">
         <p class="session_card_body font-secondary text-center">{{ worksession.duration }}</p>
       </div>
-    {% endfor %}
+    {% endfor %} 
+    {% else %}
+    <div class="session_card">
+      <h3 class="session_card_title font-secondary">Aún no tienes sesiones de trabajo</h3>
+    </div>
+    {% endif %}
   </div>
 </div>
-
 {% endblock %}
