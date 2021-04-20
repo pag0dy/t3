@@ -3,7 +3,7 @@ $(document).ready(function(){
     $('#id_account_type').unbind();
         $('#id_account_type').on('change', function(){
             if($(this).val()=='TA'){
-                $('#company-fields').fadeIn(700);
+                $('#company-fields').toggle();
             }
             else{
                 $('#company-fields').fadeOut(700);
@@ -15,4 +15,8 @@ $(document).ready(function(){
             $('#'+ $(this).val()).toggle("slow", function(){       
             });
         });
+    $('#project_select').on('change', function(){
+        $('.hideselect').hide();
+        $('.' + $(this).val()).toggle();
+    }).change();
 });

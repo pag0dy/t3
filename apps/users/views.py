@@ -8,41 +8,38 @@ from ..master.utils import filtro_usuario_email, filtro_usuario, filtro_empresa
 
 def user(request):
     this_user = filtro_usuario(request.session['id'])
-    return render(request, 'mi_info.html', {'user':this_user})
-
-
-def editarperfil(request):
-    this_user = filtro_usuario(request.session['id'])
-    if request.method == 'GET':
-        data = {
+    data = {
             'name':this_user.name,
             'lastname':this_user.lastname,
             'email':this_user.email,
         }
-        editform = EditUserForm(initial=data)
-        editpass = EditPassForm()
-        context = {
+    editform = EditUserForm(initial=data)
+    editpass = EditPassForm()
+    context = {
             'user':this_user,
             'editform':editform,
             'editpass': editpass
-        }
-        return render(request, 'editarperfil.html', context)
+    }
+    return render(request, 'mi_info.html', context)
+
+
+def editarperfil(request, methods=['POST']):
+    this_user = filtro_usuario(request.session['id'])
+    editform = EditUserForm(request.POST)
+    if editform.is_valid():
+        this_user.name = request.POST['name']
+        this_user.lastname = request.POST['lastname']
+        this_user.email = request.POST['email']
+        this_user.save()
+        mensaje = 'Has actualizado tu perfil exitosamente!'
+        messages.success(request, mensaje)
+        return redirect('user')
     else:
-        editform = EditUserForm(request.POST)
-        if editform.is_valid():
-            this_user.name = request.POST['name']
-            this_user.lastname = request.POST['lastname']
-            this_user.email = request.POST['email']
-            this_user.save()
-            mensaje = 'Has actualizado tu perfil exitosamente!'
-            messages.success(request, mensaje)
-            return redirect('home')
-        else:
-            context = {
-                'editform': editform,
-                'editpass': EditPassForm()
-            }
-            return render(request, 'editarperfil.html', context)
+        context = {
+            'editform': editform,
+            'editpass': EditPassForm()
+        }
+        return render(request, 'mi_info.html', context)
 
 def editarpass(request, methods=['POST']):
     this_user = filtro_usuario(request.session['id'])

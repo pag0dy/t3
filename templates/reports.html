@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sesión de trabajo{% endblock %}
+{% block nav %}
+    {% load crispy_forms_tags %}
+    {% if user.company == 'No company' %}
+        {% include 'nav-bar.html' %}   
+    {% else %}
+        {% include 'company-nav.html' %} 
+            {% endif %}
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="row my-5">
+    <div class="col">
+        <h3 class="font-main">Sesiones de trabajo de tu empresa</h3>
+        <table class="table table-striped bg-light-blue border-dark rounded shadow ">
+            <thead class="thead-dark">
+                <th>Id</th>
+                <th>Tarea</th>
+                <th>Proyecto</th>
+                <th>Colaborador</th>
+                <th>Duración</th>
+                <th>Comentarios</th>
+            </thead>
+            <tbody class="text-dark"> 
+                {% for worksesh in company_worksesh %}
+                <tr>
+                    <td>{{ worksesh.id }}</td>
+                    <td>{{ worksesh.assignment.tasks.task_name }}</td>
+                    <td>{{ worksesh.assignment.tasks.project }}</td> 
+                    <td>{{ worksesh.assignment.staff_member }}</td>  
+                    <td>{{ worksesh.duration }}</td>   
+                    <td>Sin comentarios</td> 
+                </tr>               
+                {% endfor %}             
+
+            </tbody>
+        </table>
+    </div>
+</div>  
+{% endblock %}

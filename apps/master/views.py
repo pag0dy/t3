@@ -19,19 +19,19 @@ NoCompany = Company.objects.get(id=1)
 
 def home(request):
     this_user = filtro_usuario(request.session['id'])
-
+    today = date.today()
+    print(type(today))
     assignments = Assignments.objects.filter(staff_member=this_user)
     worksessions = WorkSession.objects.filter(assignment__staff_member=this_user).order_by('-stopTime')[:3]
-    print(worksessions)
+    for worksession in worksessions:
+        print(type(worksession.duration))
     if 'company' in request.session:
         company =filtro_empresa(request.session['company'])
-        projects = Project.objects.filter(company=company, project_lead=this_user)
         context = {
             'user': this_user,
             'company':company,
             'worksessions':worksessions,
-            'assignments': assignments,
-            'projects': projects
+            'assignments':assignments
         }
         
     else: 
@@ -49,9 +49,7 @@ def login(request):
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-
-            return redirect('login')
-        
+            return redirect('login')      
         else:
             este_usuario = filtro_usuario_email(request.POST['email'])
             crearSesion(request, este_usuario)
@@ -69,7 +67,6 @@ def register(request):
         if reg_form.is_valid():
             nuevo_usuario = reg_form.save(commit=False)
             password = reg_form.clean_password()
-            
             if password:
                 pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
                 nuevo_usuario.password = pw_hash
@@ -128,7 +125,6 @@ def team_setup(request):
             nuevo_staff = form.save(commit=False)
             empresa = filtro_empresa(request.session['company'])
             nombre_empresa = remove_blanks(empresa.company_name)
-            print(nombre_empresa)
             if len(nombre_empresa) < 4:
                 password = nuevo_staff.name + nombre_empresa
             else:
@@ -171,7 +167,6 @@ def worksesh(request):
             company =filtro_empresa(request.session['company'])
             assigments = Assignments.objects.filter(staff_member=user)
             today = date.today()
-            print(today)
             active_sesh = filtro_worksesh(request.session['active_worksesh'])
             print(active_sesh.assignment.status)
             todays_seshs=[]
@@ -203,7 +198,7 @@ def worksesh(request):
             btn_class='btn-success'
             action_post = 'startworksesh'
             for assigment in assigments:
-                for worksession in assigment.worksessions.all():
+                for worksession in assigment.worksessions.all().order_by('-id'):
                     if worksession.startTime.date() == today:
                         todays_seshs.append(worksession)
                     else:
@@ -235,8 +230,30 @@ def stopworksesh(request, methods=['POST']):
         active_sesh.assignment.status = 'OH'
         print(active_sesh.assignment.status)
         active_sesh.save()
-        active_sesh.duration = active_sesh.stopTime - active_sesh.startTime
+        active_sesh.duration = active_sesh.stopTime.replace(microsecond=0) - active_sesh.startTime.replace(microsecond=0)
         active_sesh.save()
         del request.session['active_worksesh']
         print('terminó una sesh')
         return redirect('worksesh')
+
+def report(request):
+    this_user = filtro_usuario(request.session['id'])
+    company =filtro_empresa(request.session['company'])
+    staff = User.objects.filter(company=company)
+    worksessions = WorkSession.objects.all()
+    company_worksesh = []
+    for worksession in worksessions:
+        if worksession.assignment.staff_member.company == company:
+            company_worksesh.append(worksession)
+
+    context = {
+        'company_worksesh': company_worksesh,
+        'company':company,
+        'user':this_user
+    }
+    return render(request, 'reports.html', context)
+
+
+def about(request):
+    this_user = filtro_usuario(request.session['id'])
+    return render(request, 'about.html', {'user':this_user})

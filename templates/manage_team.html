@@ -10,38 +10,57 @@
     {% endif %}
 {% endblock %}
 {% block header %}
-<header class="text-center m-5">
-    <h3 class="font-main big-font">Gestión de tareas y colaboradores de {{ company.company_name }}</h3>
-</header>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <div class="col-6">
-        <h3 class="font-main">Colaboradores</h3>
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Cargo</th>
-                    <th>Nivel de permisos</th>
-                    <th>Gestionar</th>
-                </tr>
-            </thead>
-            {% for staff in company.staff_members.all %}
-            <tbody class="text-light">
-                <tr>
-                    <td>{{ staff.name }} {{ staff.lastname }}</td>
-                    <td>{{ staff.jobtitle}}</td>
-                    <td>{{ staff.get_permission_level_display }}</td>
-                    <td><button class="more btn btn-warning" value="{{ staff.id }}"><i class="bi bi-arrow-bar-right"></i></button></td>
-                </tr>
-            {% endfor %} 
-            </tbody>
-        </table>
+<div class="row justify-content-center py-5">
+    <h3 class="font-main">Selecciona un colaborador para asignarle tareas</h3>
+</div>
+    <div class="row justify-content-centerpb-3">
+        <form action="{% url 'addTask' %}" method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-3">
+                <label for="staff_member">Colaborador</label>
+                <select class="form-control" name="staff_member" id="staff_member">
+                    {% for staff in company.staff_members.all %}
+                    <option class="form-control" value="{{ staff.id }}">{{ staff.name }} {{staff.lastname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="project">Proyecto</label>
+                <select class="form-control" name="project" id="project_select">
+                {% for project in company.company_projects.all %}
+                <option class="form-control" value="{{ project.id }}">{{ project.project_name}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            {% for project in company.company_projects.all %}
+                <div class="col-3 hideselect {{ project.id }}">
+                    <label for="tasks">Tareas</label>
+                    <select class="form-control" name="tasks">
+                        {% for task in project.tasks.all %}
+                        <option class="form-control" value="{{ task.id }}">{{ task.task_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+            <button class="btn-dark-blue-sm mt-4" type="submit">Agregar</button>
+        </div>           
+        </form>  
     </div>
-    <div class="col">
+    <div class="row">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+            {% endfor %}
+        </ul>
+        {% endif %} 
+    </div>
+    <div class="col d-flex">
         {% for staff in company.staff_members.all %}
-            <div class="card hidecard text-dark" id="{{ staff.id }}">
+            <div class="card text-dark shadow mr-2" id="{{ staff.id }}">
                 <div class="card-body">
                     <h6 class="card-title">Tareas asignadas a {{ staff.name }}</h5>
                     <ul class="list-group list-group-flush">
@@ -50,27 +69,10 @@
                                 <li class="list-group-item"><span class="font-weight-bold">{{ assignment.tasks }}</span> <br>{{ assignment.tasks.project.project_name }}</li> 
                             {% endif %}                         
                         {% endfor %}
-                        <form action="{% url 'addTask' %}" method="post">
-                            {% csrf_token %}
-                            <label for="tasks">Selecciona la tarea que quieres asignar</label>
-                            <select name="tasks">
-                                {% for project in company.company_projects.all %}
-                                    {% for task in project.tasks.all %}
-                                        {% if task.assigned_to.staff_member is not staff  %}
-                                            <option value="{{ task.id }}">{{ task.task_name }} - {{ task.project }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endfor %}
-                            </select>
-                            <div class="card-body">
-                                <input type="hidden" name="staffid" value="{{ staff.id }}">
-                                <button class="btn btn-warning" type="submit">Agregar</button>
-                            </div>
-                        </form>
                     </ul>
                 </div>               
             </div> 
         {% endfor %}
-    </div>   
-</div>
+    </div> 
+
 {% endblock %}

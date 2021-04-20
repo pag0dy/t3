@@ -12,47 +12,88 @@
 {% block header %}
 <header class="text-center m-5">
     <h3 class="font-main big-font">{{ project.project_name }}</h3>
+    <h5 class="font-main medium-font">Responsable: <a href="{% url 'staff_info' id=project.project_lead.id %}">{{ project.project_lead }}</a></h5>
 </header>
 {% endblock %}
 {% block content %}
-<div class="row mb-2">
-    <div class="col">
-        <ul class="list-group w-50">
-            <li class="list-group-item">Cliente: {{ project.client }}</li>
-            <li class="list-group-item">Fecha de Inicio: {{ project.startDate }}</li>
-            <li class="list-group-item">Fecha de Término: {{ project.endDate }}</li>
-            <li class="list-group-item">Horas Asignadas: {{ project.hours_assigned }}</li>
-            <li class="list-group-item">Responsable: {{ project.project_lead }}</li>
-            <li class="list-group-item">Tareas asociadas:</li>
-            <ul class="list-group list-group-flush">           
+<div class="row row-cols-2 mb-2">
+    <div class="col-5">
+        <table class="table table-sm bg-light-blue border-dark rounded shadow">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Inicio</th>
+                    <th>Término</th>
+                    <th>HH</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ project.client }}</td>
+                    <td>{{ project.startDate|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>{{ project.endDate|date:"SHORT_DATE_FORMAT"  }}</td>
+                    <td>{{ project.hours_assigned }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm bg-light-blue border-dark rounded shadow">
+            <thead class="thead-dark">
+                <tr>
+                    <th colspan="2">Tareas del proyecto</th>
+                </tr>
+                <tr>
+                    <th>Tarea</th>
+                    <th>Prioridad</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% if project.tasks %}
                     {% for task in project.tasks.all %}
-                    <li class="list-group-item list-group-item-secondary">{{ task.task_name }}</li>                  
+                    <tr>
+                        <td>{{ task.task_name }}</td>
+                        <td>{{ task.priority }}</td>
+                    </tr>
                     {% endfor %}
                 {% else %}    
                     <p class="font-secondary font-italic">Aún no tienes tareas asociadas a este proyecto.</p>
                 {% endif %}
+            </tbody>
+        </table>  
+    </div>        
+    <div class="col-6 ml-5">    
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+                {% endfor %}
             </ul>
-        </ul>
-    </div>
-    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
-    <div class="col">
-        <div>            
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
-                    {% endfor %}
-                </ul>
-            {% endif %}                   
-        </div>
+        {% endif %}  
+        {% if user.permission_level == 'a' or user.permission_level == 'b' %}                      
         <h3 class="font-main">Agrega una tarea al proyecto</h3>
         <form action="{% url 'project' id=project.id %}" method="post">
             {% csrf_token %}
-            {{ form|crispy }}
+            <div class="form-row">
+                <div class="col">
+                    {{ form.task_name|as_crispy_field }}
+                </div>
+                <div class="col">
+                    {{ form.hours_assigned|as_crispy_field }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    {{ form.startDate|as_crispy_field }}
+                </div>
+                <div class="col">
+                    {{ form.endDate|as_crispy_field }}
+                </div>
+                <div class="col">
+                    {{ form.priority|as_crispy_field }}
+                </div>
+            </div>
             <button class="btn btn-warning" type="submit">Agregar</button>
         </form>
+        {% endif %}
     </div>     
-    {% endif %}
 </div>
 {% endblock %}

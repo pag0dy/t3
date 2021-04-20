@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_outside.html' %}
 {% load static %}
 {% block title %}Regístrate {% endblock %}
 {% block header %}
@@ -9,6 +9,13 @@
 <h3 class="font-secondary">Ingresa tus datos y crea una cuenta</h3>
 <div class="row align-items-start justify-content-center">
     <div class="col">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+            {% endfor %}
+        </ul>
+        {% endif %}
         <form class="font-secondary w-75" action="register" method="post">
         {% csrf_token %}
             <div class="form-row">
@@ -53,7 +60,7 @@
     </div>
     <div class="col w-25 text-center">  
         <img class="main-img" src="{% static 'master/img/t3_register.png' %}" alt="Forms">
-        <p class="font-secondary my-2">Si ya tienes una cuenta, inicia sesión <a href="{% url 'login' %}">aquí!</a></p>   
+        <p class="font-secondary my-2">Si ya tienes una cuenta, inicia sesión <a class="text-light" href="{% url 'login' %}">aquí!</a></p>   
     </div>
 </div>
 {% endblock %}

@@ -17,12 +17,18 @@ class Project(models.Model):
 
 
 class Task(models.Model):
+    PRIORITY = (
+        ('H', 'High'),
+        ('M', 'Medium'),
+        ('L', 'Low')
+    )
     task_name = models.CharField(max_length=254)
     startDate = models.DateField()
     endDate = models.DateField()
     hours_assigned = models.PositiveIntegerField()
     project = models.ForeignKey(Project, related_name='tasks', on_delete=models.CASCADE)
     assigned_to = models.ManyToManyField(User, through='Assignments', blank = True)
+    priority = models.CharField(max_length=1, choices=PRIORITY, default='L')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

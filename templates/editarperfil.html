@@ -26,14 +26,14 @@
     <form action="editarperfil" method="post">
       {% csrf_token %}
       {{ editform|crispy }}
-      <button class="btn-dark-blue" type="submit">Editar mi información</button>
+      <button class="btn-dark-blue-md font-main" type="submit">Editar mi información</button>
     </form>
   </div>
   <div class="col-4">
     <form action="editarpass" method="post">
       {% csrf_token %}
       {{ editpass|crispy }}
-      <button class="btn-dark-blue" type="submit">Cambiar mi contraseña</button>
+      <button class="btn-dark-blue-md font-main" type="submit">Cambiar mi contraseña</button>
     </form>
   </div>
 </div>

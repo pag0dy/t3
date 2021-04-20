@@ -66,7 +66,7 @@ def project(request, id):
 
 
 def addTask(request, methods=['POST']):
-    staff = filtro_usuario(request.POST['staffid'])
+    staff = filtro_usuario(request.POST['staff_member'])
     task = filtro_tarea(request.POST['tasks'])
     asignar = Assignments.objects.create(staff_member=staff, tasks =task)
     asignar.save()

@@ -10,12 +10,9 @@
     {% endif %}
 {% endblock %}
 {% block header %}
-<header class="text-center m-5">
-    <h3 class="font-main big-font">Colaboradores de  {{ user.name }}</h3>
-</header>
 {% endblock %}
 {% block content %}
-<div class="row">
+<div class="row my-5">
     <div class="col">
         <div>            
             {% if messages %}
@@ -35,7 +32,7 @@
     </div>
     <div class="col">
         <h3 class="font-main">Colaboradores</h3>
-        <table class="table table-striped">
+        <table class="table bg-light-blue border-dark rounded shadow table-striped">
             <thead class="thead-dark">
                 <th>Nombre</th>
                 <th>Cargo</th>

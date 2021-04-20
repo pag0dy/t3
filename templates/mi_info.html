@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Mi perfil{% endblock %}
 {% block nav %}
+  {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
         {% include 'nav-bar.html' %}   
     {% else %}
@@ -9,10 +10,9 @@
     {% endif %}   
 {% endblock %}
 {% block header %}
-    {% include 'header_user.html' %}
 {% endblock %}
 {% block content %}
-<div class="row row-cols-2 pb-2">
+<div class="row row-cols-2 py-5">
   <div class="col">
     <h3 class="font-main big-font text-left">Tu información:</h3>
   </div>
@@ -22,25 +22,53 @@
 </div>
 <div class="row">
   <div class="col-4">
-    <ul class="list-group pb-2">
-        <h3 class="font-main medium-font text-left">Nombre:</h3>
-        <li class="list-group-item font-secondary">{{  user.name }} {{ user.lastname }}</li>        
-    </ul>
-    <ul class="list-group">
-        <h3 class="font-main medium-font text-left">Cargo:</h3>
-        <li class="list-group-item font-secondary">{{  user.jobtitle }}</li>        
-    </ul>
-    <ul class="list-group">
-      <h3 class="font-main medium-font text-left">Correo:</h3>
-      <li class="list-group-item font-secondary">{{  user.email }}</li>        
-    </ul>
-    <ul class="list-group mb-3">
-      <h3 class="font-main medium-font text-left">Empresa:</h3>
-      <li class="list-group-item font-secondary">{{  user.company }}</li>        
-    </ul>
-    <a class="btn-dark-blue" href="{% url 'editarperfil' %}">Editar mi información</a>
+    <div>            
+      {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+              {% endfor %}
+          </ul>
+      {% endif %}                   
+    </div>
+    <div class="bg-light-blue border-dark rounded shadow">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td class="bg-dark font-weight-bold text-light">Nombre:</td>
+            <td>{{  user.name }} {{ user.lastname }}</td>
+          </tr>
+          <tr>
+            <td class="bg-dark font-weight-bold text-light">Cargo:</td>
+            <td>{{  user.jobtitle }}</td>
+          </tr>
+          <tr>
+            <td class="bg-dark font-weight-bold text-light">Correo:</td>
+            <td>{{  user.email }}</td>
+          </tr>
+          <tr>
+            <td class="bg-dark font-weight-bold text-light">Empresa:</td>
+            <td>{{  user.company }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="col-6 d-flex">
+  <div class="col d-flex">
+    <div class="col">
+      <form action="editarperfil" method="post">
+        {% csrf_token %}
+        {{ editform|crispy }}
+        <button class="btn-dark-blue-md font-main" type="submit">Editar</button>
+      </form>
+    </div>
+    <div class="col">
+      <form action="editarpass" method="post">
+        {% csrf_token %}
+        {{ editpass|crispy }}
+        <button class="btn-dark-blue-md font-main" type="submit">Cambiar mi contraseña</button>
+      </form>
+    </div>
   </div>
 </div>
 

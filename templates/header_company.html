@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header %}
+<div class="container">
+  <div class="row my-1 justify-content-around">
+    <h3 class="font-main header-font text-uppercase">{{ company.company_name }}</h3>
+    {% if user.permission_level == 'a' %}
+    <a class="btn-dark-blue-sm" href="{% url 'editcompany' %}">Editar Empresa</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
