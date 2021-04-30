@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import RegistrationForm, LoginForm, EditUserForm, EditPassForm, CompanyForm, StaffForm
+from .forms import RegistrationFormTeam, RegistrationFormSolo, LoginForm, EditUserForm, EditPassForm, CompanyForm, StaffForm
 from .models import User, Company
 from ..tasks.models import Task, Assignments, Project
 from django.contrib import messages

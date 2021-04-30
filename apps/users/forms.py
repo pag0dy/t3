@@ -4,7 +4,7 @@ from .validators import letters_only, confirm_pass
 from django.core.exceptions import ValidationError
 import bcrypt
 
-class RegistrationForm(forms.ModelForm):
+class RegistrationFormTeam(forms.ModelForm):
 
     confirmpass = forms.CharField(max_length=80, label='Confirmar contraseña', widget= forms.PasswordInput())
     widgets = {
@@ -19,7 +19,7 @@ class RegistrationForm(forms.ModelForm):
     
     class Meta:
         model = User
-        exclude = ['permission_level', 'company']
+        exclude = ['permission_level', 'status', 'company']
 
         widgets = {
             'password' : forms.PasswordInput()
@@ -29,8 +29,7 @@ class RegistrationForm(forms.ModelForm):
             'name': 'Nombre',
             'lastname': 'Apellido',
             'jobtitle': 'Cargo',
-            'account_type': 'Tipo de cuenta',
-            'password': 'Contraseña'
+            'password': 'Contraseña',
         }
 
     def clean_password(self):
@@ -45,6 +44,50 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_user(self):
         data = self.cleaned_data['email']
+
+
+class RegistrationFormSolo(forms.ModelForm):
+
+    confirmpass = forms.CharField(max_length=80, label='Confirmar contraseña', widget= forms.PasswordInput())
+    widgets = {
+        'confirmpass' : forms.PasswordInput()
+    }
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+        }),
+        error_messages={'invalid': 'Por favor ingrese un email válido'}
+    )
+    
+    class Meta:
+        model = User
+        exclude = ['permission_level', 'status', 'company']
+
+        widgets = {
+            'password' : forms.PasswordInput()
+        }
+
+        labels = {
+            'name': 'Nombre',
+            'lastname': 'Apellido',
+            'jobtitle': 'Cargo',
+            'password': 'Contraseña',
+        }
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        confirm =  self.data['confirmpass']
+        errors = []
+        errors.append(confirm_pass(data, confirm))
+        if errors == [None]:
+            return data
+        else:
+            raise ValidationError(errors)
+
+    def clean_user(self):
+        data = self.cleaned_data['email']
+
+
 
 class EditUserForm(forms.ModelForm):
     email = forms.EmailField(

@@ -19,6 +19,7 @@ def createProject(request):
         return render(request, 'createProject.html', context)
     else:
         project_form = ProjectForm(request.POST)
+        print(project_form.is_valid())
         if project_form.is_valid():
             nuevo_proyecto = project_form.save(commit=False)
             nuevo_proyecto.company = filtro_empresa(request.session['company'])
@@ -62,6 +63,8 @@ def project(request, id):
             nueva_tarea.save()
             mensaje = "Tarea agregada exitosamente!"
             messages.success(request, mensaje)
+            assignment = Assignments.objects.create(staff_member=user, tasks=nueva_tarea, status='BL')
+            assignment.save()
             return redirect('../project/' + str(project.id))
 
 

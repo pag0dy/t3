@@ -50,7 +50,7 @@
                     <label for="project_lead">Responsable</label>
                     <select class="form-control" name="project_lead" id="project_lead">
                         {% for staff in company.staff_members.all %}
-                            <option value="staff.id">{{ staff.name }} {{ staff.lastname }}</option>
+                            <option value="{{staff.id}}">{{ staff.name }} {{ staff.lastname }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -68,18 +68,31 @@
                 <th>Fecha de Término</th>
                 <th>Detalles</th>
             </thead>
-            <tbody class="text-light">               
-                {% if user.permission_level == 'a' %}
-                    {% for project in company.company_projects.all %}
-                    <tr>
-                        <td>{{ project.project_name }}</td>
-                        <td>{{ project.client }}</td>
-                        <td>{{ project.startDate }}</td>
-                        <td>{{ project.endDate }}</td>
-                        <td><a href="{% url 'project' id=project.id %}">+</a></td>
-                    </tr>                       
+            <tbody class="text-light">              
+                {% if user.accout_type != 'SU' %}
+                    {% if user.permission_level == 'a' %}
+                        {% for project in company.company_projects.all %}
+                        <tr>
+                            <td>{{ project.project_name }}</td>
+                            <td>{{ project.client }}</td>
+                            <td>{{ project.startDate }}</td>
+                            <td>{{ project.endDate }}</td>
+                            <td><a href="{% url 'project' id=project.id %}">+</a></td>
+                        </tr>                       
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}    
+                {% if user.account_type == 'SU' %}
+                    {% for project in user.projects_assigned.all %}
+                        <tr>
+                            <td>{{ project.project_name }}</td>
+                            <td>{{ project.client }}</td>
+                            <td>{{ project.startDate }}</td>
+                            <td>{{ project.endDate }}</td>
+                            <td><a href="{% url 'project' id=project.id %}">+</a></td>
+                        </tr>                       
                     {% endfor %}
-                {% endif %}
+                {% endif %}               
             </tbody>
         </table>
     </div>

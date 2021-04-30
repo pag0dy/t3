@@ -9,9 +9,23 @@
             <p class="big-font font-secondary">¿Sabes cuanto tiempo le dedicas a tus tareas?</p>
             <hr class="my-1">
             <p class="font-secondary">Con t<sup>3</sup> task time tracker podrás llevar registro del tiempo que dedicas a cada proyecto y tarea, de forma rápida y ordenada.</p>
-            <a class="btn-dark-blue" href="{% url 'login' %}" role="button">Ingresar</a>
-            <a class="btn-dark-blue" href="{% url 'register' %}" role="button">Crear cuenta</a>
-          </div>
+            <div class="row">
+                <div class="col-2">
+                    <a class="btn btn-secondary" href="{% url 'login' %}" role="button">Ingresar</a>
+                </div>
+                <div class="col-2 ml-3">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Crear cuenta
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="{% url 'registersolo' %}">Personal</a>
+                          <a class="dropdown-item" href="{% url 'register' %}">Empresa</a>
+                        </div>
+                    </div>
+                </div> 
+            </div>   
+        </div>         
     </div>
     <div class="col w-25">   
         <img class="main-img" src="{% static 'master/img/t3.png' %}" alt="ProgressTracking">  

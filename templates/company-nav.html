@@ -14,15 +14,20 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'user' %}">Mi perfil</a>
       </li>
+      {% if user.account_type != 'SU' %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'companyprofile' %}">Mi empresa</a>
       </li>  
-      {% if user.permission_level != 'd' %}
+        {% if user.permission_level != 'd' %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'report' %}">Reportes</a>
+        </li>
+        {% endif %}     
+      {% else %}  
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'report' %}">Reportes</a>
+        <a class="nav-link" href="{% url 'createProject' %}">Mis Proyectos</a>
       </li>
       {% endif %}
-
       <li class="nav-item">
         <a class="nav-link" href="{% url 'worksesh' %}"><i class="bi bi-alarm-fill orange_color"></i></a>
       </li>

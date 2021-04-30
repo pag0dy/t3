@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from ..users.forms import RegistrationForm, LoginForm, CompanyForm, StaffForm
+from ..users.forms import RegistrationFormTeam, RegistrationFormSolo, LoginForm, CompanyForm, StaffForm
 from ..users.models import User, Company
 from ..tasks.models import Assignments, Project, Task
 from .models import WorkSession
@@ -63,41 +63,65 @@ def login(request):
 
 def register(request):
     if request.method == 'POST':
-        reg_form = RegistrationForm(request.POST)
+        reg_form = RegistrationFormTeam(request.POST)
         if reg_form.is_valid():
             nuevo_usuario = reg_form.save(commit=False)
             password = reg_form.clean_password()
             if password:
                 pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
                 nuevo_usuario.password = pw_hash
-                if nuevo_usuario.account_type == 'SU':
-                    nuevo_usuario.company = NoCompany
+                comp_form = CompanyForm(request.POST)
+                if comp_form.is_valid():
+                    nueva_empresa = comp_form.save()
+                    request.session['company'] = nueva_empresa.id
+                    nuevo_usuario.company = nueva_empresa
                     nuevo_usuario.permission_level = 'a'
+                    nuevo_usuario.account_type = 'TA'
                     nuevo_usuario.save()
                     crearSesion(request, nuevo_usuario)
-                    return redirect('home')
-                else:
-                    comp_form = CompanyForm(request.POST)
-                    if comp_form.is_valid():
-                        nueva_empresa = comp_form.save()
-                        request.session['company'] = nueva_empresa.id
-                        nuevo_usuario.company = nueva_empresa
-                        nuevo_usuario.permission_level = 'a'
-                        nuevo_usuario.save()
-                        crearSesion(request, nuevo_usuario)
-                        return redirect('team_setup')
+                    return redirect('team_setup')
 
-        else:                    
-            return redirect('register')
+        else:    
+            context = {
+                'reg_form': reg_form
+            }                
+            return render(request, 'register.html', context)
 
     else:
-        reg_form = RegistrationForm()
+        reg_form = RegistrationFormTeam()
         company_form = CompanyForm()
         context = {
             'reg_form' : reg_form,
             'company_form': company_form
         }
         return render(request, 'register.html', context)
+
+def registersolo(request):
+    if request.method == 'POST':
+        reg_form = RegistrationFormSolo(request.POST)
+        if reg_form.is_valid():
+            nuevo_usuario = reg_form.save(commit=False)
+            password = reg_form.clean_password()
+            if password:
+                pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
+                nuevo_usuario.password = pw_hash
+                nuevo_usuario.company = NoCompany
+                nuevo_usuario.save()
+                crearSesion(request, nuevo_usuario)
+                return redirect('home')
+
+        else:     
+            context = {
+                'reg_form':reg_form,
+            }               
+            return render(request, 'registersolo.html', context)
+
+    else:
+        reg_form = RegistrationFormSolo()
+        context = {
+            'reg_form' : reg_form
+        }
+        return render(request, 'registersolo.html', context)
 
 def index(request):
     return render(request, 'index.html')

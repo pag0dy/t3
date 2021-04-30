@@ -16,7 +16,7 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <form class="font-secondary w-75" action="register" method="post">
+        <form class="font-secondary w-75" action="registersolo" method="post">
         {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col">
@@ -31,11 +31,6 @@
                     {{ reg_form.jobtitle|as_crispy_field}}
                 </div>
                 <div class="form-group col">
-                    {{ reg_form.account_type|as_crispy_field }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col">
                     {{ reg_form.email|as_crispy_field}}
                 </div>
             </div>
@@ -47,13 +42,9 @@
                     {{ reg_form.confirmpass|as_crispy_field }}
                 </div>
             </div>
-                <div class="form-group col">
-                    {{ company_form.company_name|as_crispy_field}}
-                </div>
-                <div class="form-group col">
-                    {{ company_form.n_workers|as_crispy_field }}
-                </div>
-            </div>
+            <input type="hidden" name="account_type" value="SU">
+            <input type="hidden" name="company_name" value="NoCompany">
+            <input type="hidden" name="permission_level" value="a">
             <button class="btn btn-warning my-3" type="submit">Crear cuenta</button>
         </form>
     </div>

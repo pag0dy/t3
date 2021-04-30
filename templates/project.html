@@ -68,7 +68,7 @@
                 {% endfor %}
             </ul>
         {% endif %}  
-        {% if user.permission_level == 'a' or user.permission_level == 'b' %}                      
+        {% if user.permission_level == 'a' or user.permission_level == 'b' or user.account_type == 'SU' %}                      
         <h3 class="font-main">Agrega una tarea al proyecto</h3>
         <form action="{% url 'project' id=project.id %}" method="post">
             {% csrf_token %}
@@ -90,7 +90,10 @@
                 <div class="col">
                     {{ form.priority|as_crispy_field }}
                 </div>
-            </div>
+            </div> 
+            {% if user.account_type == 'SU' %}
+            <input type="hidden" name="assigned_to" value="user">           
+            {% endif %}     
             <button class="btn btn-warning" type="submit">Agregar</button>
         </form>
         {% endif %}
