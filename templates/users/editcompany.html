@@ -1,16 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %}Empresa{% endblock %}
 {% block nav %}
   {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}   
 {% endblock %}
 {% block header %}
-    {% include 'header_user.html' %}
+    {% include 'master/header_user.html' %}
 {% endblock %}
 {% block content %}
 <div class="row row-cols-2 pb-2">

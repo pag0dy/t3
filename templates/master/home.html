@@ -1,0 +1,77 @@
+{% extends 'master/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block nav %}
+    {% include 'master/company-nav.html' %} 
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-4">
+    <h3 class="font-main big-font text-center">Tus tareas prioritarias</h3>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+            {% endfor %}
+        </ul>
+    {% endif %}  
+    <div class="bg-light-blue border-dark rounded shadow">
+      <table class="table table-sm">
+        <thead class="thead-dark">
+          <tr>
+            <th>Tarea</th>
+            <th>Proyecto</th>
+            <th>Prioridad</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if assignments %}
+          {% for assignment in assignments %}
+            {% if assignment.tasks.priority == 'H' or assignment.tasks.priority == 'M' %}
+            <tr>
+              <td>{{ assignment.tasks.task_name }}</td> 
+              <td>{{ assignment.tasks.project.project_name }}</td>
+              <td class="text-center">{{ assignment.tasks.priority }}</td>
+            </tr>
+            {% endif %}        
+          {% endfor %} 
+        {% else %}
+        <tr>
+          <td>Aún no tienes tareas asignadas</td>
+        </tr> 
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-7">
+    <h3 class="font-main big-font text-center">Últimas sesiones de trabajo</h3>
+    {% if worksessions %}
+    <div class="row row-cols-1 row-cols-md-3 justify-content-center">
+      {% for worksession in worksessions %}
+        <div class="col">
+          <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Proyecto {{ worksession.assignment.tasks.project }}</div>
+            <div class="card-body">
+              <h5 class="card-title">{{ worksession.assignment.tasks.task_name }}</h5>
+              <div class="card-footer text-center">{{ worksession.duration }}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="row justify-content-around">
+        <div class="card text-white bg-secondary mb-3 shadow" style="max-width: 18rem;">
+          <div class="card-body text-center">
+            <p class="card-text">Aún no tienes sesiones de trabajo</p>
+            <a class="btn btn-info" href="{% url 'createProject' %}">Gestionar proyectos y tareas</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

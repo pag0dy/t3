@@ -16,7 +16,7 @@ def createProject(request):
             'company': empresa
         }
 
-        return render(request, 'createProject.html', context)
+        return render(request, 'tasks/createProject.html', context)
     else:
         project_form = ProjectForm(request.POST)
         print(project_form.is_valid())
@@ -37,7 +37,7 @@ def createProject(request):
                 'company': empresa
             }
 
-            return render(request, 'createProject.html', context)
+            return render(request, 'tasks/createProject.html', context)
 
 def project(request, id):
     user = filtro_usuario(request.session['id'])
@@ -53,7 +53,7 @@ def project(request, id):
                 'company': empresa
 
             }
-            return render(request, 'project.html', context)
+            return render(request, 'tasks/project.html', context)
 
     else:
         form = TaskForm(request.POST)
@@ -78,3 +78,54 @@ def addTask(request, methods=['POST']):
     return redirect('manage_team')
 
     
+def editProject(request, id):
+    user = filtro_usuario(request.session['id'])
+    empresa = filtro_empresa(request.session['company'])
+    project = filtro_proyecto(id)
+    if request.method == 'GET':
+        data = {
+            'project_name': project.project_name,
+            'client': project.client,
+            'startDate': project.startDate,
+            'endDate': project.endDate,
+            'hours_assigned': project.hours_assigned,
+            'project_lead': project.project_lead
+        }
+        form = ProjectForm(initial=data)
+        context = {
+            'form': form,
+            'user': user,
+            'company': empresa,
+            'project':project
+        }
+        return render(request, 'tasks/editProject.html', context)
+
+    else:
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project.project_name = request.POST['project_name']
+            project.client = request.POST['client']
+            project.startDate = request.POST['startDate']
+            project.endDate = request.POST['endDate']
+            project.hours_assigned = request.POST['hours_assigned']
+            project.project_lead = filtro_usuario(request.POST['project_lead'])
+            project.save()
+            message = "Proyecto actualizado exitosamente"
+            messages.success(request, message)
+            return redirect('../edit/' + str(project.id))
+        else:
+            context = {
+                'form': form,
+                'user': user,
+                'company':company
+            }
+            return render(request, 'editProject.html', context)
+
+def removeProject(request, id):
+    user = filtro_usuario(request.session['id'])
+    empresa = filtro_empresa(request.session['company'])
+    project = filtro_proyecto(id)
+    project.delete()
+    message = "Proyecto eliminado"
+    messages.success(request, message)
+    return redirect('createProject')

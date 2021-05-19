@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %} Gestión de equipo y tareas{% endblock %}
 {% block nav %}
     {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}
 {% endblock %}
 {% block header %}

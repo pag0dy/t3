@@ -1,9 +1,9 @@
-{% extends 'base_outside.html' %}
+{% extends 'master/base_outside.html' %}
 {% load static %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
 <div class="row align-items-center">
-    <div class="col">
+    <div class="col mx-5">
         <div class="jumbotron bg-transparent">
             <h1 class="font-main jumbo-font">t<sup>3</sup></h1>
             <p class="big-font font-secondary">¿Sabes cuanto tiempo le dedicas a tus tareas?</p>
@@ -27,7 +27,7 @@
             </div>   
         </div>         
     </div>
-    <div class="col w-25">   
+    <div class="col ml-5">   
         <img class="main-img" src="{% static 'master/img/t3.png' %}" alt="ProgressTracking">  
     </div>
 </div>

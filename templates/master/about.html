@@ -1,11 +1,11 @@
-{% extends 'base_outside.html' %}
+{% extends 'master/base_outside.html' %}
 {% load static %}
 {% block title %}Sobre t3 {% endblock %}
 {% block nav %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}   
 {% endblock %}
 {% block content %}

@@ -1,13 +1,13 @@
-{% extends 'base_outside.html' %}
+{% extends 'master/base_outside.html' %}
 {% load static %}
 {% block title %}Inicio{% endblock %}
 {% block header %}
     {% load crispy_forms_tags %}
-    {% include 'header.html' %}
+    {% include 'master/header.html' %}
 {% endblock %}
 {% block content %}
-<div class="row">
-    <div class="col w-50">
+<div class="row justify-content-center">
+    <div class="col-3">
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -15,7 +15,7 @@
             {% endfor %}
         </ul>
         {% endif %} 
-        <form class="font-secondary" action="login" method="post">
+        <form class="font-secondary mt-5 small-form" action="login" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="email">Correo:</label>
@@ -28,7 +28,7 @@
             <button type="submit" class="btn btn-warning my-2">Ingresar</button>
         </form>
     </div>
-    <div class="col w-25 text-center">  
+    <div class="col-5 text-center">  
         <img class="main-img" src="{% static 'master/img/t3_login.png' %}" alt="Forms">
         <p class="font-secondary my-2">¿Aún no tienes una cuenta? Regístrate <a class="text-light"  href="{% url 'register' %}">aquí!</a></p>   
     </div>

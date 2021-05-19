@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %}Sesión de trabajo{% endblock %}
 {% block nav %}
     {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
             {% endif %}
 {% endblock %}
 {% block header %}
@@ -15,8 +15,8 @@
 </header>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <div class="col d-inline-block align-items-center">
+<div class="row justify-content-center">
+    <div class="col-5">
         <h3 class="font-main">¿En qué vas a trabajar?</h3>
         <div class="form-inline">
             <form id="sesh_form" action="{{ action_post}}" method="post">
@@ -30,7 +30,7 @@
             </form>
         </div>
     </div>
-    <div class="col overflow-auto">
+    <div class="col-6 overflow-auto">
         <h3 class="font-main">Tu sesiones de trabajo de hoy</h3>
         <table class="table table-striped bg-light-blue border-dark rounded shadow ">
             <thead class="thead-dark">

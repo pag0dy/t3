@@ -1,27 +1,20 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %}Mi perfil{% endblock %}
 {% block nav %}
   {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}   
 {% endblock %}
 {% block header %}
 {% endblock %}
 {% block content %}
-<div class="row row-cols-2 py-5">
-  <div class="col">
-    <h3 class="font-main big-font text-left">Tu información:</h3>
-  </div>
-  <div class="col-6 d-flex">
-    <h3 class="font-main big-font text-left"></h3>
-  </div>
-</div>
-<div class="row">
+<div class="row row-cols-2 justify-content-center py-5">
   <div class="col-4">
+    <h3 class="font-main big-font text-left">Tu información:</h3>
     <div>            
       {% if messages %}
           <ul class="messages">
@@ -46,30 +39,34 @@
             <td class="bg-dark font-weight-bold text-light">Correo:</td>
             <td>{{  user.email }}</td>
           </tr>
+          {% if user.account_type == 'TA' %}
           <tr>
             <td class="bg-dark font-weight-bold text-light">Empresa:</td>
             <td>{{  user.company }}</td>
           </tr>
+          {% endif %}
         </tbody>
       </table>
     </div>
   </div>
-  <div class="col d-flex">
-    <div class="col">
-      <form action="editarperfil" method="post">
-        {% csrf_token %}
-        {{ editform|crispy }}
-        <button class="btn-dark-blue-md font-main" type="submit">Editar</button>
-      </form>
-    </div>
-    <div class="col">
-      <form action="editarpass" method="post">
-        {% csrf_token %}
-        {{ editpass|crispy }}
-        <button class="btn-dark-blue-md font-main" type="submit">Cambiar mi contraseña</button>
-      </form>
+  <div class="col-6">
+    <h3 class="font-main big-font text-center">Edita tu información</h3>
+    <div class="row justify-content-center">
+      <div class="col-5">
+        <form action="editarperfil" method="post">
+          {% csrf_token %}
+          {{ editform|crispy }}
+          <button class="btn btn-secondary font-main" type="submit">Editar</button>
+        </form>
+      </div>
+      <div class="col-5">
+        <form action="editarpass" method="post">
+          {% csrf_token %}
+          {{ editpass|crispy }}
+          <button class="btn btn-secondary font-main" type="submit">Cambiar mi contraseña</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-
 {% endblock %}

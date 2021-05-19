@@ -22,7 +22,7 @@ def home(request):
     today = date.today()
     print(type(today))
     assignments = Assignments.objects.filter(staff_member=this_user)
-    worksessions = WorkSession.objects.filter(assignment__staff_member=this_user).order_by('-stopTime')[:3]
+    worksessions = WorkSession.objects.filter(assignment__staff_member=this_user).order_by('-stopTime')[:6]
     for worksession in worksessions:
         print(type(worksession.duration))
     if 'company' in request.session:
@@ -31,17 +31,17 @@ def home(request):
             'user': this_user,
             'company':company,
             'worksessions':worksessions,
-            'assignments':assignments
+            'assignments':assignments,
         }
         
     else: 
         context = {
             'user':this_user,
             'worksessions':worksessions,
-            'assignments': assignments
+            'assignments': assignments,
         }
 
-    return render(request, 'home.html', context)
+    return render(request, 'master/home.html', context)
 
 def login(request):
     if request.method == 'POST':
@@ -59,7 +59,7 @@ def login(request):
             return redirect('home')
 
     else:
-        return render(request, 'login.html')
+        return render(request, 'users/login.html')
 
 def register(request):
     if request.method == 'POST':
@@ -85,7 +85,7 @@ def register(request):
             context = {
                 'reg_form': reg_form
             }                
-            return render(request, 'register.html', context)
+            return render(request, 'users/register.html', context)
 
     else:
         reg_form = RegistrationFormTeam()
@@ -94,7 +94,7 @@ def register(request):
             'reg_form' : reg_form,
             'company_form': company_form
         }
-        return render(request, 'register.html', context)
+        return render(request, 'users/register.html', context)
 
 def registersolo(request):
     if request.method == 'POST':
@@ -114,17 +114,17 @@ def registersolo(request):
             context = {
                 'reg_form':reg_form,
             }               
-            return render(request, 'registersolo.html', context)
+            return render(request, 'users/registersolo.html', context)
 
     else:
         reg_form = RegistrationFormSolo()
         context = {
             'reg_form' : reg_form
         }
-        return render(request, 'registersolo.html', context)
+        return render(request, 'users/registersolo.html', context)
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'master/index.html')
 
 def logout(request):
     try:
@@ -141,7 +141,7 @@ def team_setup(request):
             'form':form, 
             'company':company
         }
-        return render(request, 'team_setup.html', context)
+        return render(request, 'users/team_setup.html', context)
 
     else:
         form = StaffForm(request.POST)
@@ -170,7 +170,7 @@ def team_setup(request):
             context = {
                 'form': StaffForm()
             }
-            return render(request, 'team_setup.html', {'form':form})
+            return render(request, 'users/team_setup.html', {'form':form})
 
 def manage_team(request):
     if request.method == 'GET':
@@ -182,7 +182,7 @@ def manage_team(request):
             'user':user,
             'assignments':assignments
         }
-        return render(request, 'manage_team.html', context)
+        return render(request, 'users/manage_team.html', context)
 
 def worksesh(request):
     if 'active_worksesh' in request.session:
@@ -211,7 +211,7 @@ def worksesh(request):
                 'action_post':action_post
 
             }
-            return render(request, 'worksesh.html', context)
+            return render(request, 'master/worksesh.html', context)
     else:
         if 'company' in request.session:
             user = filtro_usuario(request.session['id'])
@@ -234,7 +234,7 @@ def worksesh(request):
                 'btn_class': btn_class,
                 'action_post':action_post
             }
-            return render(request, 'worksesh.html', context)
+            return render(request, 'master/worksesh.html', context)
 
 
 
@@ -275,9 +275,9 @@ def report(request):
         'company':company,
         'user':this_user
     }
-    return render(request, 'reports.html', context)
+    return render(request, 'master/reports.html', context)
 
 
 def about(request):
     this_user = filtro_usuario(request.session['id'])
-    return render(request, 'about.html', {'user':this_user})
+    return render(request, 'master/about.html', {'user':this_user})

@@ -1,14 +1,13 @@
-{% extends 'base_outside.html' %}
+{% extends 'master/base_outside.html' %}
 {% load static %}
 {% block title %}Regístrate {% endblock %}
 {% block header %}
     {% load crispy_forms_tags %}
-    {% include 'header.html' %}
+    {% include 'master/header.html' %}
 {% endblock %}
 {% block content %}
-<h3 class="font-secondary">Ingresa tus datos y crea una cuenta</h3>
-<div class="row align-items-start justify-content-center">
-    <div class="col">
+<div class="row justify-content-center">
+    <div class="col-5">
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -16,7 +15,8 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <form class="font-secondary w-75" action="register" method="post">
+        <h3 class="font-secondary">Ingresa tus datos y crea una cuenta</h3>
+        <form class="font-secondary" action="register" method="post">
         {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col">
@@ -31,11 +31,6 @@
                     {{ reg_form.jobtitle|as_crispy_field}}
                 </div>
                 <div class="form-group col">
-                    {{ reg_form.account_type|as_crispy_field }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col">
                     {{ reg_form.email|as_crispy_field}}
                 </div>
             </div>
@@ -47,6 +42,7 @@
                     {{ reg_form.confirmpass|as_crispy_field }}
                 </div>
             </div>
+            <div class="form-row">
                 <div class="form-group col">
                     {{ company_form.company_name|as_crispy_field}}
                 </div>
@@ -54,10 +50,12 @@
                     {{ company_form.n_workers|as_crispy_field }}
                 </div>
             </div>
+            <input type="hidden" name="account_type" value="TA">
+            <input type="hidden" name="permission_level" value="a">
             <button class="btn btn-warning my-3" type="submit">Crear cuenta</button>
         </form>
     </div>
-    <div class="col w-25 text-center">  
+    <div class="col-4 text-center">  
         <img class="main-img" src="{% static 'master/img/t3_register.png' %}" alt="Forms">
         <p class="font-secondary my-2">Si ya tienes una cuenta, inicia sesión <a class="text-light" href="{% url 'login' %}">aquí!</a></p>   
     </div>

@@ -1,0 +1,113 @@
+{% extends 'master/base.html' %}
+{% load static %}
+{% block title %} Crear Proyecto{% endblock %}
+{% block nav %}
+    {% load crispy_forms_tags %}
+    {% if user.company == 'No company' %}
+        {% include 'master/nav-bar.html' %}   
+    {% else %}
+        {% include 'master/company-nav.html' %} 
+    {% endif %}
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-10">
+        <div class="row d-flex flex-row justify-content-between mb-3">
+            <h3 class="font-main">Proyectos</h3>
+            <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Crear un nuevo proyecto
+            </button>
+        </div>
+        <div class="row mb-3 collapse" id="collapseExample">
+            <div class="col">
+                <div>            
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
+                            {% endfor %}
+                        </ul>
+                    {% endif %}                   
+                </div>
+                <h3 class="font-main">Agrega un nuevo proyecto</h3>
+                <form action="{% url 'createProject' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col">
+                            {{ form.project_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group col">
+                            {{ form.client|as_crispy_field }}
+                        </div>
+                        <div class="form-group col">
+                            <label for="project_lead">Responsable</label>
+                            <select class="form-control" name="project_lead" id="project_lead">
+                                {% for staff in company.staff_members.all %}
+                                    <option value="{{staff.id}}">{{ staff.name }} {{ staff.lastname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            {{ form.startDate|as_crispy_field }}
+                        </div>
+                        <div class="form-group col">
+                            {{ form.endDate|as_crispy_field }}
+                        </div>
+                        <div class="form-group col">
+                            {{ form.hours_assigned|as_crispy_field }}
+                        </div>
+                    </div>
+                    <button class="btn btn-warning" type="submit">Agregar</button>
+                </form>
+            </div>
+        </div>
+        <table class="table table-striped w-75 bg-light-blue border-dark rounded shadow">
+            <thead class="thead-dark">
+                <th>Nombre</th>
+                <th>Cliente</th>
+                <th>Inicio</th>
+                <th>Término</th>
+                <th class="text-center">Detalles</th>
+            </thead>
+            <tbody class="text-light">              
+                {% if user.accout_type != 'SU' %}
+                    {% if user.permission_level == 'a' %}
+                        {% for project in company.company_projects.all %}
+                        <tr>
+                            <td>{{ project.project_name }}</td>
+                            <td>{{ project.client }}</td>
+                            <td>{{ project.startDate|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td>{{ project.endDate|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-secondary" href="{% url 'project' id=project.id %}">Tareas</a>
+                                <a class="btn btn-secondary" href="{% url 'editProject' id=project.id %}">Editar</a>
+                                <a class="btn btn-secondary" href="{% url 'removeProject' id=project.id %}">Eliminar</a>
+                            </td>
+                        </tr>                       
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% for project in user.projects_assigned.all %}
+                        <tr>
+                            <td>{{ project.project_name }}</td>
+                            <td>{{ project.client }}</td>
+                            <td>{{ project.startDate|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td>{{ project.endDate|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-secondary" href="{% url 'project' id=project.id %}">Gestionar</a>
+                                <a class="btn btn-secondary" href="{% url 'editProject' id=project.id %}">Editar</a>
+                                <a class="btn btn-secondary" href="{% url 'removeProject' id=project.id %}">Eliminar</a>
+                            </td>
+                        </tr>                       
+                    {% endfor %}
+                {% endif %}               
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

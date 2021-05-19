@@ -20,7 +20,7 @@ def user(request):
             'editform':editform,
             'editpass': editpass
     }
-    return render(request, 'mi_info.html', context)
+    return render(request, 'users/mi_info.html', context)
 
 
 def editarperfil(request, methods=['POST']):
@@ -39,7 +39,7 @@ def editarperfil(request, methods=['POST']):
             'editform': editform,
             'editpass': EditPassForm()
         }
-        return render(request, 'mi_info.html', context)
+        return render(request, 'users/mi_info.html', context)
 
 def editarpass(request, methods=['POST']):
     this_user = filtro_usuario(request.session['id'])
@@ -58,7 +58,7 @@ def editarpass(request, methods=['POST']):
             'editform': EditUserForm(),
             'editpass': editpass
         }
-        return render(request, 'editarperfil.html', context)
+        return render(request, 'users/editarperfil.html', context)
         
 def companyprofile(request):
     this_user = filtro_usuario(request.session['id'])
@@ -67,7 +67,7 @@ def companyprofile(request):
         'user':this_user,
         'company':company
     }
-    return render(request, 'company.html', context)
+    return render(request, 'users/company.html', context)
 
 def editcompany(request):
     this_user = filtro_usuario(request.session['id'])
@@ -83,7 +83,7 @@ def editcompany(request):
             'user': this_user,
             'company':company
         }
-        return render(request, 'editcompany.html', context)
+        return render(request, 'users/editcompany.html', context)
     else:
         form = CompanyForm(request.POST)
         if form.is_valid():
@@ -105,7 +105,7 @@ def staff_info(request, id):
         'company':company,
         'staff':staff
     }
-    return render(request, 'staff_info.html', context)
+    return render(request, 'users/staff_info.html', context)
 
 def editstaff(request, id):
     this_user = filtro_usuario(request.session['id'])
@@ -127,7 +127,7 @@ def editstaff(request, id):
             'company':company,
             'staff':staff
         }
-        return render(request, 'editstaff.html', context)
+        return render(request, 'users/editstaff.html', context)
     else:
         form = StaffForm(request.POST)
         if form.is_valid():

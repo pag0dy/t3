@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %} Crear Proyecto{% endblock %}
 {% block nav %}
     {% load crispy_forms_tags %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}
 {% endblock %}
 {% block header %}
@@ -16,8 +16,8 @@
 </header>
 {% endblock %}
 {% block content %}
-<div class="row row-cols-2 mb-2">
-    <div class="col-5">
+<div class="row row-cols-2 mb-2 justify-content-center">
+    <div class="col-6 mx-3">
         <table class="table table-sm bg-light-blue border-dark rounded shadow">
             <thead class="thead-dark">
                 <tr>
@@ -39,11 +39,13 @@
         <table class="table table-sm bg-light-blue border-dark rounded shadow">
             <thead class="thead-dark">
                 <tr>
-                    <th colspan="2">Tareas del proyecto</th>
+                    <th colspan="4">Tareas del proyecto</th>
                 </tr>
                 <tr>
                     <th>Tarea</th>
                     <th>Prioridad</th>
+                    <th>Horas asignadas</th>
+                    <th>Horas trabajadas</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +54,8 @@
                     <tr>
                         <td>{{ task.task_name }}</td>
                         <td>{{ task.priority }}</td>
+                        <td>{{ task.hours_assigned }}</td>
+                        td
                     </tr>
                     {% endfor %}
                 {% else %}    
@@ -60,7 +64,7 @@
             </tbody>
         </table>  
     </div>        
-    <div class="col-6 ml-5">    
+    <div class="col-4 mx-3">    
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -76,8 +80,13 @@
                 <div class="col">
                     {{ form.task_name|as_crispy_field }}
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="col">
                     {{ form.hours_assigned|as_crispy_field }}
+                </div>
+                <div class="col">
+                    {{ form.priority|as_crispy_field }}
                 </div>
             </div>
             <div class="form-row">
@@ -86,9 +95,6 @@
                 </div>
                 <div class="col">
                     {{ form.endDate|as_crispy_field }}
-                </div>
-                <div class="col">
-                    {{ form.priority|as_crispy_field }}
                 </div>
             </div> 
             {% if user.account_type == 'SU' %}

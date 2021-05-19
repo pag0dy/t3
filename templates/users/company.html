@@ -1,53 +1,49 @@
-{% extends 'base.html' %}
+{% extends 'master/base.html' %}
 {% load static %}
 {% block title %}Empresa{% endblock %}
 {% block nav %}
     {% if user.company == 'No company' %}
-        {% include 'nav-bar.html' %}   
+        {% include 'master/nav-bar.html' %}   
     {% else %}
-        {% include 'company-nav.html' %} 
+        {% include 'master/company-nav.html' %} 
     {% endif %}   
 {% endblock %}
 {% block header %}
-    {% include 'header_company.html' %}
+    {% include 'master/header_company.html' %}
 {% endblock %}
 {% block content %}
-<div class="row row-cols-2 pb-2">
-  <div class="col-3">
+<div class="row justify-content-around mx-2">
+  <div class="col">
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
         <li {% if message.tags %} class="{{ message.tag }}"{% endif %}>{{ message }}</li>                         
         {% endfor %}
     </ul>
-    {% endif %}    
-  </div>
-</div>
-<div class="row">
-  <div class="col">
+    {% endif %}  
     <table class="table bg-light-blue border-dark rounded shadow">
-    <thead class="thead-dark">
-      <tr>
-        <th>Proyecto</th>
-        <th>Responsable</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Término</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for project in company.company_projects.all %}
-      <tr>
-        <td><a href="{% url 'project' id=project.id %}">{{ project.project_name }}</a></td>
-        <td>{{ project.project_lead }}</td>
-        <td>{{ project.startDate }}</td>
-        <td>{{ project.endDate }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-    </table>
-    {% if user.permission_level == 'a' or user.permission_level == 'b' %}
-    <a class="btn-dark-blue-md" href="{% url 'createProject' %}">Agregar proyecto</a>
-    {% endif %}
+      <thead class="thead-dark">
+        <tr>
+          <th>Proyecto</th>
+          <th>Responsable</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Término</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in company.company_projects.all %}
+        <tr>
+          <td><a href="{% url 'project' id=project.id %}">{{ project.project_name }}</a></td>
+          <td>{{ project.project_lead }}</td>
+          <td>{{ project.startDate }}</td>
+          <td>{{ project.endDate }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+      {% if user.permission_level == 'a' or user.permission_level == 'b' %}
+      <a class="btn btn-secondary" href="{% url 'createProject' %}">Agregar proyecto</a>
+      {% endif %}  
   </div>
   <div class="col">
     <table class="table bg-light-blue border-dark rounded shadow">
@@ -71,10 +67,9 @@
       </tbody>
     </table>
     {% if user.permission_level == 'a' or user.permission_level == 'b' %}
-      <a class="btn-dark-blue-md" href="{% url 'team_setup' %}">Agregar colaborador</a>
-      <a class="btn-dark-blue-md" href="{% url 'manage_team' %}">Asignar tareas</a>
+      <a class="btn btn-secondary" href="{% url 'team_setup' %}">Agregar colaborador</a>
+      <a class="btn btn-secondary" href="{% url 'manage_team' %}">Asignar tareas</a>
     {% endif %}
   </div>
-</div>
 </div>
 {% endblock %}
